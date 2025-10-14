@@ -3,7 +3,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"; // Added CardFooter
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { CheckCircle, Shield, DollarSign, FormInput, Brain, Rocket, Globe, HardDrive, Wrench, Layout, Smartphone, MessageCircleMore, Star, Users, MapPin, Share2, Camera } from "lucide-react"; // Added Share2 and Camera
