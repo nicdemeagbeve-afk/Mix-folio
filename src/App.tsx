@@ -10,6 +10,12 @@ import NotFound from "./pages/NotFound";
 import Editor from "./pages/Editor";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import DashboardOverview from "./pages/DashboardOverview";
+import DashboardCustomize from "./pages/DashboardCustomize";
+import DashboardStats from "./pages/DashboardStats";
+import DashboardSettings from "./pages/DashboardSettings";
+import DashboardHelp from "./pages/DashboardHelp";
+
 
 const queryClient = new QueryClient();
 
@@ -24,8 +30,15 @@ const App = () => (
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Index />} />
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/editor/:templateId" element={<Editor />} />
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route index element={<DashboardOverview />} /> {/* Default dashboard view */}
+              <Route path="overview" element={<DashboardOverview />} />
+              <Route path="customize" element={<DashboardCustomize />} />
+              <Route path="stats" element={<DashboardStats />} />
+              <Route path="settings" element={<DashboardSettings />} />
+              <Route path="help" element={<DashboardHelp />} />
+            </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

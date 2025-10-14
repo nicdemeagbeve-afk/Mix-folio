@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import DashboardSidebar from "@/components/DashboardSidebar";
-import MultiStepWizard from "@/components/MultiStepWizard";
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import { Outlet } from "react-router-dom"; // Import Outlet for nested routes
 
 const Dashboard: React.FC = () => {
   return (
@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={80}>
             <div className="flex h-full items-center justify-center p-6 bg-gray-100 dark:bg-gray-800">
-              <MultiStepWizard />
+              <Outlet /> {/* This is where the nested dashboard routes will render */}
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>

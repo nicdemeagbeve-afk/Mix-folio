@@ -8,12 +8,15 @@ import { supabase } from '@/integrations/supabase/client';
 import { showSuccess, showError } from '@/utils/toast';
 import { Menu, X } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import ProfileDropdown from './ProfileDropdown'; // Import the new ProfileDropdown
 
 const Header: React.FC = () => {
   const { user, isLoading } = useSession();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  const firstName = user?.user_metadata?.first_name || user?.email?.split('@')[0] || 'Utilisateur';
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -45,15 +48,16 @@ const Header: React.FC = () => {
             <Link to="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               Accueil
             </Link>
+            {user && (
+              <span className="text-gray-700 dark:text-gray-300">
+                👋 Bonjour {firstName} !
+              </span>
+            )}
             <Link to="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               Créer un site
             </Link>
             {user ? (
-              <>
-                <Button onClick={handleLogout} variant="outline" className="text-red-600 border-red-600 hover:bg-red-50 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-900">
-                  Déconnexion
-                </Button>
-              </>
+              <ProfileDropdown /> {/* Use the new ProfileDropdown */}
             ) : (
               !isLoading && (
                 <Link to="/login">
@@ -71,13 +75,26 @@ const Header: React.FC = () => {
             <Link to="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={toggleMenu}>
               Accueil
             </Link>
+            {user && (
+              <span className="text-gray-700 dark:text-gray-300">
+                👋 Bonjour {firstName} !
+              </span>
+            )}
             <Link to="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={toggleMenu}>
               Créer un site
             </Link>
             {user ? (
-              <Button onClick={() => { handleLogout(); toggleMenu(); }} variant="outline" className="text-red-600 border-red-600 hover:bg-red-50 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-900">
-                Déconnexion
-              </Button>
+              <>
+                <Button onClick={() => { navigate('/dashboard/settings'); toggleMenu(); }} variant="ghost" className="w-full justify-start">
+                  <UserIcon className="mr-2 h-4 w-4" /> Profil
+                </Button>
+                <Button onClick={() => { navigate('/dashboard/help'); toggleMenu(); }} variant="ghost" className="w-full justify-start">
+                  <HelpCircle className="mr-2 h-4 w-4" /> Aide
+                </Button>
+                <Button onClick={() => { handleLogout(); toggleMenu(); }} variant="outline" className="w-full text-red-600 border-red-600 hover:bg-red-50 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-900">
+                  Déconnexion
+                </Button>
+              </>
             ) : (
               !isLoading && (
                 <Link to="/login" onClick={toggleMenu}>
