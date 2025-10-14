@@ -17,77 +17,78 @@ const SessionContext = createContext<SessionContextType | undefined>(undefined);
 export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // Start as true
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Define protected routes
+  const protectedRoutes = ['/', '/wizard', '/editor'];
+
   useEffect(() => {
+    // Function to handle initial session and navigation
+    const handleInitialSession = async () => {
+      setIsLoading(true); // Ensure loading is true at the start of session check
+
+      const { data: { session: initialSession } } = await supabase.auth.getSession();
+      setSession(initialSession);
+      setUser(initialSession?.user || null);
+      setIsLoading(false); // Set to false after initial session is determined
+
+      // Handle initial navigation based on session
+      const isProtectedRoute = protectedRoutes.some(route =>
+        location.pathname === route || (route.endsWith('/') && location.pathname.startsWith(route))
+      );
+
+      if (!initialSession && isProtectedRoute && location.pathname !== '/login') {
+        console.log('Initial check: No session on protected route, redirecting to /login');
+        showError('Vous devez être connecté pour accéder à cette page.');
+        navigate('/login');
+      } else if (initialSession && location.pathname === '/login') {
+        console.log('Initial check: User logged in and on /login, redirecting to /');
+        navigate('/');
+      }
+    };
+
+    handleInitialSession(); // Run initial session check
+
+    // Set up auth state change listener
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, currentSession) => {
         console.log('Auth state change event:', event);
         console.log('Current session:', currentSession);
         setSession(currentSession);
         setUser(currentSession?.user || null);
-        setIsLoading(false);
+
+        const isProtectedRoute = protectedRoutes.some(route =>
+          location.pathname === route || (route.endsWith('/') && location.pathname.startsWith(route))
+        );
 
         if (event === 'SIGNED_IN') {
           showSuccess('Connexion réussie !');
-          if (location.pathname === '/login') {
-            console.log('Redirecting from /login to / after SIGNED_IN');
+          if (location.pathname === '/login' || isProtectedRoute) { // If on login or any protected route, redirect to home
+            console.log('SIGNED_IN: Redirecting to /');
             navigate('/');
           }
         } else if (event === 'SIGNED_OUT') {
           showSuccess('Déconnexion réussie.');
-          if (location.pathname !== '/login') {
-            console.log('Redirecting to /login after SIGNED_OUT');
+          if (isProtectedRoute && location.pathname !== '/login') { // If on protected route and not already on login, redirect
+            console.log('SIGNED_OUT: Redirecting to /login');
             navigate('/login');
           }
-        } else if (event === 'INITIAL_SESSION') {
-          // Handle initial session, no toast needed
         } else if (event === 'PASSWORD_RECOVERY') {
           showSuccess('Vérifiez votre email pour réinitialiser votre mot de passe.');
         } else if (event === 'USER_UPDATED') {
           showSuccess('Votre profil a été mis à jour.');
         }
+        // For other events like INITIAL_SESSION, we rely on the initial handleInitialSession() call
+        // or the subsequent state updates to manage navigation.
       }
     );
-
-    // Initial check for session
-    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
-      console.log('Initial session check:', initialSession);
-      setSession(initialSession);
-      setUser(initialSession?.user || null);
-      setIsLoading(false);
-      if (!initialSession && location.pathname !== '/login') {
-        console.log('No initial session, redirecting to /login');
-        navigate('/login');
-      }
-    });
 
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [navigate, location.pathname]);
-
-  // Protect routes
-  useEffect(() => {
-    console.log('Route protection useEffect running. User:', user?.id, 'isLoading:', isLoading, 'Path:', location.pathname);
-    if (!isLoading) {
-      const protectedRoutes = ['/', '/wizard', '/editor'];
-      const isProtectedRoute = protectedRoutes.some(route => 
-        location.pathname === route || (route.endsWith('/') && location.pathname.startsWith(route))
-      );
-
-      if (isProtectedRoute && !user) {
-        console.log('Protected route and no user. Redirecting to /login.');
-        showError('Vous devez être connecté pour accéder à cette page.');
-        navigate('/login');
-      } else if (user && location.pathname === '/login') {
-        console.log('User logged in and on /login. Redirecting to /.');
-        navigate('/');
-      }
-    }
-  }, [user, isLoading, location.pathname, navigate]);
+  }, [navigate, location.pathname]); // Depend on location.pathname to re-evaluate protection if URL changes
 
   if (isLoading) {
     return (
