@@ -15,7 +15,7 @@ const Login: React.FC = () => {
         </h1>
         <Auth
           supabaseClient={supabase}
-          providers={[]} // You can add 'google', 'github', etc. here if configured in Supabase
+          providers={[]}
           appearance={{
             theme: ThemeSupa,
             variables: {
@@ -27,8 +27,8 @@ const Login: React.FC = () => {
               },
             },
           }}
-          theme="light" // Or "dark" based on your preference
-          redirectTo={window.location.origin} // Redirect to home after login
+          theme="light"
+          // La prop redirectTo est supprimée pour laisser SessionContextProvider gérer la navigation
         />
       </div>
       <div className="absolute bottom-4">

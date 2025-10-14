@@ -24,20 +24,22 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, currentSession) => {
+        console.log('Auth state change event:', event);
+        console.log('Current session:', currentSession);
         setSession(currentSession);
         setUser(currentSession?.user || null);
         setIsLoading(false);
 
         if (event === 'SIGNED_IN') {
           showSuccess('Connexion réussie !');
-          // Redirect authenticated users away from login page
           if (location.pathname === '/login') {
+            console.log('Redirecting from /login to / after SIGNED_IN');
             navigate('/');
           }
         } else if (event === 'SIGNED_OUT') {
           showSuccess('Déconnexion réussie.');
-          // Redirect unauthenticated users to login page if they are on a protected route
           if (location.pathname !== '/login') {
+            console.log('Redirecting to /login after SIGNED_OUT');
             navigate('/login');
           }
         } else if (event === 'INITIAL_SESSION') {
@@ -52,10 +54,12 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
 
     // Initial check for session
     supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+      console.log('Initial session check:', initialSession);
       setSession(initialSession);
       setUser(initialSession?.user || null);
       setIsLoading(false);
       if (!initialSession && location.pathname !== '/login') {
+        console.log('No initial session, redirecting to /login');
         navigate('/login');
       }
     });
@@ -67,6 +71,7 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
 
   // Protect routes
   useEffect(() => {
+    console.log('Route protection useEffect running. User:', user?.id, 'isLoading:', isLoading, 'Path:', location.pathname);
     if (!isLoading) {
       const protectedRoutes = ['/', '/wizard', '/editor'];
       const isProtectedRoute = protectedRoutes.some(route => 
@@ -74,14 +79,23 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
       );
 
       if (isProtectedRoute && !user) {
+        console.log('Protected route and no user. Redirecting to /login.');
         showError('Vous devez être connecté pour accéder à cette page.');
         navigate('/login');
       } else if (user && location.pathname === '/login') {
-        navigate('/'); // Redirect logged-in users away from the login page
+        console.log('User logged in and on /login. Redirecting to /.');
+        navigate('/');
       }
     }
   }, [user, isLoading, location.pathname, navigate]);
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">
+        Chargement de la session...
+      </div>
+    );
+  }
 
   return (
     <SessionContext.Provider value={{ session, user, isLoading }}>
