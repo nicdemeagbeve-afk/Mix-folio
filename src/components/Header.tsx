@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button';
 import { useSession } from '@/providers/SessionContextProvider';
 import { supabase } from '@/integrations/supabase/client';
 import { showSuccess, showError } from '@/utils/toast';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User as UserIcon, HelpCircle } from 'lucide-react'; // Added UserIcon, HelpCircle for mobile menu
 import { useIsMobile } from '@/hooks/use-mobile';
-import ProfileDropdown from './ProfileDropdown'; // Import the new ProfileDropdown
+import ProfileDropdown from './ProfileDropdown';
 
 const Header: React.FC = () => {
   const { user, isLoading } = useSession();
@@ -33,79 +33,81 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white dark:bg-gray-900 shadow-sm py-4 px-6 sticky top-0 z-50">
-      <div className="container mx-auto flex items-center justify-between">
-        <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-white">
-          SiteExpress
-        </Link>
+    <React.Fragment>
+      <header className="bg-white dark:bg-gray-900 shadow-sm py-4 px-6 sticky top-0 z-50">
+        <div className="container mx-auto flex items-center justify-between">
+          <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-white">
+            SiteExpress
+          </Link>
 
-        {isMobile ? (
-          <Button variant="ghost" size="icon" onClick={toggleMenu}>
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
-        ) : (
-          <nav className="flex items-center space-x-6">
-            <Link to="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-              Accueil
-            </Link>
-            {user && (
-              <span className="text-gray-700 dark:text-gray-300">
-                👋 Bonjour {firstName} !
-              </span>
-            )}
-            <Link to="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-              Créer un site
-            </Link>
-            {user ? (
-              <ProfileDropdown /> {/* Use the new ProfileDropdown */}
-            ) : (
-              !isLoading && (
-                <Link to="/login">
-                  <Button>Connexion</Button>
-                </Link>
-              )
-            )}
-          </nav>
-        )}
-      </div>
-
-      {isMobile && isMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-white dark:bg-gray-900 shadow-md py-4 px-6 lg:hidden">
-          <nav className="flex flex-col space-y-4">
-            <Link to="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={toggleMenu}>
-              Accueil
-            </Link>
-            {user && (
-              <span className="text-gray-700 dark:text-gray-300">
-                👋 Bonjour {firstName} !
-              </span>
-            )}
-            <Link to="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={toggleMenu}>
-              Créer un site
-            </Link>
-            {user ? (
-              <>
-                <Button onClick={() => { navigate('/dashboard/settings'); toggleMenu(); }} variant="ghost" className="w-full justify-start">
-                  <UserIcon className="mr-2 h-4 w-4" /> Profil
-                </Button>
-                <Button onClick={() => { navigate('/dashboard/help'); toggleMenu(); }} variant="ghost" className="w-full justify-start">
-                  <HelpCircle className="mr-2 h-4 w-4" /> Aide
-                </Button>
-                <Button onClick={() => { handleLogout(); toggleMenu(); }} variant="outline" className="w-full text-red-600 border-red-600 hover:bg-red-50 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-900">
-                  Déconnexion
-                </Button>
-              </>
-            ) : (
-              !isLoading && (
-                <Link to="/login" onClick={toggleMenu}>
-                  <Button className="w-full">Connexion</Button>
-                </Link>
-              )
-            )}
-          </nav>
+          {isMobile ? (
+            <Button variant="ghost" size="icon" onClick={toggleMenu}>
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+          ) : (
+            <nav className="flex items-center space-x-6">
+              <Link to="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                Accueil
+              </Link>
+              {user && (
+                <span className="text-gray-700 dark:text-gray-300">
+                  👋 Bonjour {firstName} !
+                </span>
+              )}
+              <Link to="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                Créer un site
+              </Link>
+              {user ? (
+                <ProfileDropdown />
+              ) : (
+                !isLoading && (
+                  <Link to="/login">
+                    <Button>Connexion</Button>
+                  </Link>
+                )
+              )}
+            </nav>
+          )}
         </div>
-      )}
-    </header>
+
+        {isMobile && isMenuOpen && (
+          <div className="absolute top-full left-0 w-full bg-white dark:bg-gray-900 shadow-md py-4 px-6 lg:hidden">
+            <nav className="flex flex-col space-y-4">
+              <Link to="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={toggleMenu}>
+                Accueil
+              </Link>
+              {user && (
+                <span className="text-gray-700 dark:text-gray-300">
+                  👋 Bonjour {firstName} !
+                </span>
+              )}
+              <Link to="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={toggleMenu}>
+                Créer un site
+              </Link>
+              {user ? (
+                <>
+                  <Button onClick={() => { navigate('/dashboard/settings'); toggleMenu(); }} variant="ghost" className="w-full justify-start">
+                    <UserIcon className="mr-2 h-4 w-4" /> Profil
+                  </Button>
+                  <Button onClick={() => { navigate('/dashboard/help'); toggleMenu(); }} variant="ghost" className="w-full justify-start">
+                    <HelpCircle className="mr-2 h-4 w-4" /> Aide
+                  </Button>
+                  <Button onClick={() => { handleLogout(); toggleMenu(); }} variant="outline" className="w-full text-red-600 border-red-600 hover:bg-red-50 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-900">
+                    Déconnexion
+                  </Button>
+                </>
+              ) : (
+                !isLoading && (
+                  <Link to="/login" onClick={toggleMenu}>
+                    <Button className="w-full">Connexion</Button>
+                  </Link>
+                )
+              )}
+            </nav>
+          </div>
+        )}
+      </header>
+    </React.Fragment>
   );
 };
 
