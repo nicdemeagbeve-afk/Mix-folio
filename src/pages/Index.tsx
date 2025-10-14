@@ -145,13 +145,13 @@ const Index = () => {
           <TrustPoint icon={<CheckCircle className="h-6 w-6 text-green-500" />} text="+300 sites déjà créés en Afrique de l’Ouest" />
           <TrustPoint icon={<Shield className="h-6 w-6 text-blue-500" />} text="Hébergement local rapide et sécurisé" />
           <TrustPoint icon={<DollarSign className="h-6 w-6 text-yellow-500" />} text="Aucun abonnement caché — 1000 F une seule fois" />
-          <TrustPoint icon={<MessageCircleMore className="h-6 w-6 text-green-500" />} text="Support réactif sur WhatsApp" /> {/* Replaced Whatsapp */}
+          <TrustPoint icon={<MessageCircleMore className="h-6 w-6 text-green-500" />} text="Support réactif sur WhatsApp" />
           <TrustPoint icon={<Brain className="h-6 w-6 text-purple-500" />} text="Système 100 % automatisé basé sur l’IA" />
           <TrustPoint icon={<Users className="h-6 w-6 text-orange-500" />} text="Créé par une équipe locale passionnée du numérique" />
         </div>
         {/* Placeholder for illustration */}
         <div className="mt-12 text-center">
-          <img src="https://via.placeholder.com/600x300/60A5FA/FFFFFF?text=Equipe+Tech+Africaine" alt="Équipe Tech Africaine" className="mx-auto rounded-lg shadow-lg" />
+          <img src="/placeholder.svg" alt="Équipe Tech Africaine" className="mx-auto rounded-lg shadow-lg" />
         </div>
       </section>
 
@@ -161,12 +161,12 @@ const Index = () => {
           Exemples de sites créés automatiquement
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <SiteExample imageUrl="https://via.placeholder.com/400x300/FFD700/FFFFFF?text=Restaurant" title="Restaurant 'Le Gourmet'" />
-          <SiteExample imageUrl="https://via.placeholder.com/400x300/AEC6CF/FFFFFF?text=Boutique" title="Boutique 'Mode Chic'" />
-          <SiteExample imageUrl="https://via.placeholder.com/400x300/98FB98/FFFFFF?text=Salon" title="Salon de Coiffure 'Beauté Divine'" />
-          <SiteExample imageUrl="https://via.placeholder.com/400x300/DDA0DD/FFFFFF?text=Startup" title="Startup 'InnovTech'" />
-          <SiteExample imageUrl="https://via.placeholder.com/400x300/ADD8E6/FFFFFF?text=Association" title="Association 'Aide aux Enfants'" />
-          <SiteExample imageUrl="https://via.placeholder.com/400x300/F08080/FFFFFF?text=Artisan" title="Artisan 'Créations Bois'" />
+          <SiteExample imageUrl="/placeholder.svg" title="Restaurant 'Le Gourmet'" />
+          <SiteExample imageUrl="/placeholder.svg" title="Boutique 'Mode Chic'" />
+          <SiteExample imageUrl="/placeholder.svg" title="Salon de Coiffure 'Beauté Divine'" />
+          <SiteExample imageUrl="/placeholder.svg" title="Startup 'InnovTech'" />
+          <SiteExample imageUrl="/placeholder.svg" title="Association 'Aide aux Enfants'" />
+          <SiteExample imageUrl="/placeholder.svg" title="Artisan 'Créations Bois'" />
         </div>
         <div className="text-center mt-12">
           <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline text-lg font-semibold">
@@ -241,7 +241,7 @@ const Index = () => {
           </Button>
           {/* Placeholder for illustration */}
           <div className="mt-10">
-            <img src="https://via.placeholder.com/400x200/60A5FA/FFFFFF?text=Smartphone+Site+Pret" alt="Smartphone affichant un site prêt" className="mx-auto rounded-lg shadow-xl" />
+            <img src="/placeholder.svg" alt="Smartphone affichant un site prêt" className="mx-auto rounded-lg shadow-xl" />
           </div>
         </div>
       </section>
@@ -253,9 +253,9 @@ const Index = () => {
             <div className="text-2xl font-bold text-white mb-2">SiteExpress</div>
             <p className="text-sm">Création automatique de sites web pour tous.</p>
             <div className="flex space-x-4 mt-4">
-              <a href="#" className="hover:text-white transition-colors"><MessageCircleMore className="h-6 w-6" /></a> {/* Replaced Whatsapp */}
-              <a href="#" className="hover:text-white transition-colors"><Share2 className="h-6 w-6" /></a> {/* Replaced Facebook */}
-              <a href="#" className="hover:text-white transition-colors"><Camera className="h-6 w-6" /></a> {/* Replaced Instagram */}
+              <a href="#" className="hover:text-white transition-colors"><MessageCircleMore className="h-6 w-6" /></a>
+              <a href="#" className="hover:text-white transition-colors"><Share2 className="h-6 w-6" /></a>
+              <a href="#" className="hover:text-white transition-colors"><Camera className="h-6 w-6" /></a>
             </div>
           </div>
           <div className="flex flex-col space-y-2 text-sm">
