@@ -4,7 +4,7 @@ import React from "react";
 import TemplateCard from "@/components/TemplateCard";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { useNavigate } from "react-router-dom";
-import { toast } from "@/utils/toast";
+import { showSuccess } from "@/utils/toast"; // Import showSuccess instead of toast
 
 // Dummy data for templates
 const templates = [
@@ -50,7 +50,7 @@ const TemplateSelection: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSelectTemplate = (id: string) => {
-    toast.success(`Modèle "${templates.find(t => t.id === id)?.name}" sélectionné !`);
+    showSuccess(`Modèle "${templates.find(t => t.id === id)?.name}" sélectionné !`); // Use showSuccess
     // Navigate to the editor page with the selected template ID
     navigate(`/editor/${id}`);
   };
