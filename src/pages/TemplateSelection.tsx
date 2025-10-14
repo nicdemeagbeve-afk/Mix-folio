@@ -51,11 +51,8 @@ const TemplateSelection: React.FC = () => {
 
   const handleSelectTemplate = (id: string) => {
     toast.success(`Modèle "${templates.find(t => t.id === id)?.name}" sélectionné !`);
-    // In a real application, you would store this selection and navigate to an editor page.
-    // For now, we'll just show a toast and navigate back to home or a placeholder.
-    console.log(`Selected template with ID: ${id}`);
-    // Example: navigate(`/editor/${id}`);
-    navigate("/"); // For now, navigate back to home
+    // Navigate to the editor page with the selected template ID
+    navigate(`/editor/${id}`);
   };
 
   return (
