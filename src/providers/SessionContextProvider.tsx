@@ -21,8 +21,8 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Define protected routes
-  const protectedRoutes = ['/', '/wizard', '/editor'];
+  // Define protected routes (remove '/' if home should be public)
+  const protectedRoutes = ['/dashboard', '/wizard', '/editor']; // '/' retiré pour éviter redirection automatique depuis la home
 
   useEffect(() => {
     // Function to handle initial session and navigation
@@ -36,16 +36,16 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
 
       // Handle initial navigation based on session
       const isProtectedRoute = protectedRoutes.some(route =>
-        location.pathname === route || (route.endsWith('/') && location.pathname.startsWith(route))
+        location.pathname === route || location.pathname.startsWith(route + '/')
       );
 
       if (!initialSession && isProtectedRoute && location.pathname !== '/login') {
         console.log('Initial check: No session on protected route, redirecting to /login');
         showError('Vous devez être connecté pour accéder à cette page.');
-        navigate('/login');
+        navigate('/login', { replace: true });
       } else if (initialSession && location.pathname === '/login') {
-        console.log('Initial check: User logged in and on /login, redirecting to /');
-        navigate('/');
+        console.log('Initial check: User logged in and on /login, redirecting to /dashboard');
+        navigate('/dashboard', { replace: true });
       }
     };
 
@@ -60,14 +60,14 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
         setUser(currentSession?.user || null);
 
         const isProtectedRoute = protectedRoutes.some(route =>
-          location.pathname === route || (route.endsWith('/') && location.pathname.startsWith(route))
+          location.pathname === route || location.pathname.startsWith(route + '/')
         );
 
         if (event === 'SIGNED_IN') {
           showSuccess('Connexion réussie !');
-          if (location.pathname === '/login' || isProtectedRoute) { // If on login or any protected route, redirect to home
-            console.log('SIGNED_IN: Redirecting to /');
-            navigate('/');
+          if (location.pathname === '/login' || isProtectedRoute) { // If on login or any protected route, redirect to dashboard
+            console.log('SIGNED_IN: Redirecting to /dashboard');
+            navigate('/dashboard');
           }
         } else if (event === 'SIGNED_OUT') {
           showSuccess('Déconnexion réussie.');
@@ -86,7 +86,7 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
     );
 
     return () => {
-      authListener.subscription.unsubscribe();
+      authListener?.subscription?.unsubscribe();
     };
   }, [navigate, location.pathname]); // Depend on location.pathname to re-evaluate protection if URL changes
 
