@@ -20,6 +20,7 @@ export interface WizardFormData {
   phoneNumber: string;
   plan: "pro" | "free" | undefined;
   selectedTemplateId: string;
+  subdomain: string; // Added subdomain to form data
 }
 
 const TOTAL_STEPS = 4;
@@ -36,6 +37,7 @@ const MultiStepWizard: React.FC = () => {
     phoneNumber: "",
     plan: undefined,
     selectedTemplateId: "",
+    subdomain: "", // Initialize subdomain
   });
   const navigate = useNavigate();
 

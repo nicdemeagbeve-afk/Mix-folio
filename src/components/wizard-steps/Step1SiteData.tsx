@@ -24,6 +24,7 @@ const formSchema = z.object({
     errorMap: () => ({ message: "Veuillez sélectionner un type de site." }),
   }),
   primaryColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, { message: "Format de couleur invalide." }),
+  subdomain: z.string().min(3, { message: "Le sous-domaine doit contenir au moins 3 caractères." }).regex(/^[a-z0-9-]+$/, { message: "Le sous-domaine ne peut contenir que des lettres minuscules, des chiffres et des tirets." }),
 });
 
 type Step1FormData = z.infer<typeof formSchema>;
@@ -36,6 +37,7 @@ const Step1SiteData: React.FC<Step1SiteDataProps> = ({ formData, setFormData, ne
       activityDescription: formData.activityDescription,
       siteType: formData.siteType,
       primaryColor: formData.primaryColor,
+      subdomain: formData.subdomain,
     },
   });
 
@@ -101,6 +103,22 @@ const Step1SiteData: React.FC<Step1SiteDataProps> = ({ formData, setFormData, ne
         />
         {form.formState.errors.primaryColor && (
           <p className="text-red-500 text-sm mt-1">{form.formState.errors.primaryColor.message}</p>
+        )}
+      </div>
+
+      <div>
+        <Label htmlFor="subdomain" className="mb-2 block">Votre sous-domaine (ex: monentreprise.ctcsite.com)</Label>
+        <div className="flex items-center gap-2">
+          <Input
+            id="subdomain"
+            {...form.register("subdomain")}
+            placeholder="monentreprise"
+            className="flex-grow"
+          />
+          <span className="text-gray-700 dark:text-gray-300">.ctcsite.com</span>
+        </div>
+        {form.formState.errors.subdomain && (
+          <p className="text-red-500 text-sm mt-1">{form.formState.errors.subdomain.message}</p>
         )}
       </div>
 

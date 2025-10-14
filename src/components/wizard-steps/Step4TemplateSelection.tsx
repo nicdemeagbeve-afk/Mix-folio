@@ -7,6 +7,8 @@ import { WizardFormData } from "@/components/MultiStepWizard";
 import { cn } from "@/lib/utils";
 import { CheckCircle } from "lucide-react";
 import { showSuccess, showError } from "@/utils/toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useSession } from "@/providers/SessionContextProvider";
 
 interface Step4TemplateSelectionProps {
   formData: WizardFormData;
@@ -35,6 +37,7 @@ const allTemplates = [
 const Step4TemplateSelection: React.FC<Step4TemplateSelectionProps> = ({ formData, setFormData, prevStep, handleSubmitWizard }) => {
   const [filteredTemplates, setFilteredTemplates] = useState<typeof allTemplates>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>(formData.selectedTemplateId);
+  const { user } = useSession();
 
   useEffect(() => {
     if (formData.siteType) {
@@ -61,12 +64,43 @@ const Step4TemplateSelection: React.FC<Step4TemplateSelectionProps> = ({ formDat
     setFormData((prev) => ({ ...prev, selectedTemplateId: templateId }));
   };
 
-  const handleFinalSubmit = () => {
+  const handleFinalSubmit = async () => {
     if (!selectedTemplate) {
       showError("Veuillez sélectionner un template avant de continuer.");
       return;
     }
-    handleSubmitWizard();
+    if (!user) {
+      showError("Vous devez être connecté pour créer un site.");
+      return;
+    }
+
+    showSuccess("Création de votre site...");
+
+    const { data, error } = await supabase
+      .from('sites')
+      .insert([
+        {
+          user_id: user.id,
+          subdomain: formData.subdomain,
+          title: formData.companyName,
+          description: formData.activityDescription,
+          primary_color: formData.primaryColor,
+          // template_id: formData.selectedTemplateId, // You might want to store this
+          status: 'online',
+        },
+      ])
+      .select();
+
+    if (error) {
+      console.error("Error creating site:", error);
+      showError("Erreur lors de la création de votre site : " + error.message);
+      return;
+    }
+
+    showSuccess("Votre site a été créé avec succès ! Redirection vers l'éditeur...");
+    // Now navigate to the editor with the newly created site's data
+    const newSite = data[0];
+    handleSubmitWizard(); // This will navigate to the editor, we can pass newSite data if needed
   };
 
   return (
