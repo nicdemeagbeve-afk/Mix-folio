@@ -14,7 +14,7 @@ const Index = () => {
   const navigate = useNavigate();
 
   const handleStartWizard = () => {
-    navigate("/wizard");
+    navigate("/dashboard"); // Changed from /wizard to /dashboard
   };
 
   const faqItems = [
