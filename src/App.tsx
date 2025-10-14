@@ -5,8 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import TemplateSelection from "./pages/TemplateSelection";
-import Editor from "./pages/Editor"; // Import the new Editor page
+import Wizard from "./pages/Wizard"; // Import the new Wizard page
+import Editor from "./pages/Editor";
 
 const queryClient = new QueryClient();
 
@@ -18,8 +18,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/select-template" element={<TemplateSelection />} />
-          <Route path="/editor/:templateId" element={<Editor />} /> {/* New route for the editor */}
+          <Route path="/wizard" element={<Wizard />} /> {/* New route for the wizard */}
+          <Route path="/editor/:templateId" element={<Editor />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
