@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import { CheckCircle, Shield, DollarSign, FormInput, Brain, Rocket, Globe, HardDrive, Wrench, Layout, Smartphone, MessageCircleMore, Star, Users, MapPin, Whatsapp, Facebook, Instagram } from "lucide-react";
+import { CheckCircle, Shield, DollarSign, FormInput, Brain, Rocket, Globe, HardDrive, Wrench, Layout, Smartphone, MessageCircleMore, Star, Users, MapPin, Share2, Camera } from "lucide-react"; // Added Share2 and Camera
 
 const Index = () => {
   const navigate = useNavigate();
@@ -145,7 +145,7 @@ const Index = () => {
           <TrustPoint icon={<CheckCircle className="h-6 w-6 text-green-500" />} text="+300 sites déjà créés en Afrique de l’Ouest" />
           <TrustPoint icon={<Shield className="h-6 w-6 text-blue-500" />} text="Hébergement local rapide et sécurisé" />
           <TrustPoint icon={<DollarSign className="h-6 w-6 text-yellow-500" />} text="Aucun abonnement caché — 1000 F une seule fois" />
-          <TrustPoint icon={<Whatsapp className="h-6 w-6 text-green-500" />} text="Support réactif sur WhatsApp" />
+          <TrustPoint icon={<MessageCircleMore className="h-6 w-6 text-green-500" />} text="Support réactif sur WhatsApp" /> {/* Replaced Whatsapp */}
           <TrustPoint icon={<Brain className="h-6 w-6 text-purple-500" />} text="Système 100 % automatisé basé sur l’IA" />
           <TrustPoint icon={<Users className="h-6 w-6 text-orange-500" />} text="Créé par une équipe locale passionnée du numérique" />
         </div>
@@ -253,9 +253,9 @@ const Index = () => {
             <div className="text-2xl font-bold text-white mb-2">SiteExpress</div>
             <p className="text-sm">Création automatique de sites web pour tous.</p>
             <div className="flex space-x-4 mt-4">
-              <a href="#" className="hover:text-white transition-colors"><Whatsapp className="h-6 w-6" /></a>
-              <a href="#" className="hover:text-white transition-colors"><Facebook className="h-6 w-6" /></a>
-              <a href="#" className="hover:text-white transition-colors"><Instagram className="h-6 w-6" /></a>
+              <a href="#" className="hover:text-white transition-colors"><MessageCircleMore className="h-6 w-6" /></a> {/* Replaced Whatsapp */}
+              <a href="#" className="hover:text-white transition-colors"><Share2 className="h-6 w-6" /></a> {/* Replaced Facebook */}
+              <a href="#" className="hover:text-white transition-colors"><Camera className="h-6 w-6" /></a> {/* Replaced Instagram */}
             </div>
           </div>
           <div className="flex flex-col space-y-2 text-sm">
