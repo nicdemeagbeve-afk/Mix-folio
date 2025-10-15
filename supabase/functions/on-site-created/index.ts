@@ -18,6 +18,16 @@ function replacePlaceholders(htmlContent: string, data: Record<string, string | 
   return result;
 }
 
+// Map template IDs to their associated files (HTML, CSS, JS)
+const templateFilesMap: Record<string, { html: string; css?: string; js?: string }> = {
+  'ecommerce-luxury': { html: 'samira_shop_v2.html', css: 'style-luxury.css', js: 'script.js' },
+  'ecommerce-basic': { html: 'Template de vente.html', css: 'style.css', js: 'script.js' },
+  'portfolio-basic': { html: 'Portfolio_vente/index.html', css: 'Portfolio_vente/style.css', js: 'Portfolio_vente/script.js' },
+  // Add mappings for other templates here
+  // Example for a generic template if needed:
+  // 'generic': { html: 'generic.html' },
+};
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
@@ -61,28 +71,34 @@ serve(async (req) => {
     const { selectedTemplateId, firstName, lastName, phoneNumber } = formDataContent || {};
 
     // --- Template Selection and Customization ---
-    let templateFileName = '';
-    switch (selectedTemplateId) {
-      case 'ecommerce-luxury':
-        templateFileName = 'samira_shop_v2.html';
-        break;
-      case 'ecommerce-basic':
-        templateFileName = 'Template de vente.html';
-        break;
-      case 'portfolio-basic':
-        templateFileName = 'Portfolio_vente/index.html';
-        break;
-      // Add more cases for other templates
-      default:
-        console.warn(`No specific template found for ID: ${selectedTemplateId}. Using a generic one.`);
-        // Fallback to a very basic template if no match
-        templateFileName = 'generic.html'; // You might want to create a generic.html
-        break;
-    }
+    const templateConfig = templateFilesMap[selectedTemplateId || ''] || { html: 'generic.html' }; // Fallback to generic if ID not found
 
-    let templateContent = '';
-    if (templateFileName === 'generic.html') {
-      templateContent = `
+    let templateHtmlContent = '';
+    const filesToUpload: { path: string; content: string | ArrayBuffer; contentType: string }[] = [];
+
+    // Prepare data for placeholder replacement
+    const dataToReplace = {
+      COMPANY_NAME: companyName,
+      ACTIVITY_DESCRIPTION: activityDescription,
+      PRIMARY_COLOR: primaryColor,
+      PRIMARY_COLOR_ENCODED: encodeURIComponent(primaryColor || '#3b82f6'), // For SVG background
+      FIRST_NAME: firstName,
+      LAST_NAME: lastName,
+      PHONE_NUMBER: phoneNumber,
+      WHATSAPP_LINK: `https://wa.me/${phoneNumber?.replace(/\D/g, '')}`, // Clean phone number for WhatsApp link
+      FACEBOOK_LINK: newSite.facebook_link || '#',
+      INSTAGRAM_LINK: newSite.instagram_link || '#',
+      TWITTER_LINK: newSite.twitter_link || '#',
+      LINKEDIN_LINK: newSite.linkedin_link || '#',
+      LOGO_URL: newSite.logo_url || '/placeholder.svg',
+      COVER_IMAGE_URL: newSite.cover_image_url || '/placeholder.svg',
+      ABOUT_IMAGE_URL: newSite.about_image_url || '/placeholder.svg',
+      SUBDOMAIN: subdomain,
+    };
+
+    // Fetch HTML template
+    if (templateConfig.html === 'generic.html') {
+      templateHtmlContent = `
         <!DOCTYPE html>
         <html lang="fr">
         <head>
@@ -116,15 +132,14 @@ serve(async (req) => {
         </html>
       `;
     } else {
-      // Fetch template from Supabase Storage
-      const { data: templateData, error: fetchError } = await supabaseAdmin.storage
+      const { data: htmlData, error: fetchHtmlError } = await supabaseAdmin.storage
         .from('site-templates')
-        .download(templateFileName);
+        .download(templateConfig.html);
 
-      if (fetchError) {
-        console.error(`Error fetching template ${templateFileName} from storage:`, fetchError);
-        // Fallback to generic template if specific template not found
-        templateContent = `
+      if (fetchHtmlError) {
+        console.error(`Error fetching HTML template ${templateConfig.html}:`, fetchHtmlError);
+        // Fallback to generic HTML if specific template not found
+        templateHtmlContent = `
           <!DOCTYPE html>
           <html lang="fr">
           <head>
@@ -154,60 +169,67 @@ serve(async (req) => {
               <p>Email: contact@{{SUBDOMAIN}}.ctcsite.com</p>
               <p>Téléphone: {{PHONE_NUMBER}}</p>
             </div>
+            </div>
           </body>
           </html>
         `;
       } else {
-        templateContent = await templateData.text();
+        templateHtmlContent = await htmlData.text();
       }
     }
 
-    // Prepare data for placeholder replacement
-    const dataToReplace = {
-      COMPANY_NAME: companyName,
-      ACTIVITY_DESCRIPTION: activityDescription,
-      PRIMARY_COLOR: primaryColor,
-      PRIMARY_COLOR_ENCODED: encodeURIComponent(primaryColor || '#3b82f6'), // For SVG background
-      FIRST_NAME: firstName,
-      LAST_NAME: lastName,
-      PHONE_NUMBER: phoneNumber,
-      WHATSAPP_LINK: `https://wa.me/${phoneNumber?.replace(/\D/g, '')}`, // Clean phone number for WhatsApp link
-      FACEBOOK_LINK: newSite.facebook_link || '#', // Assuming these might come from newSite or be default
-      INSTAGRAM_LINK: newSite.instagram_link || '#',
-      TWITTER_LINK: newSite.twitter_link || '#',
-      LINKEDIN_LINK: newSite.linkedin_link || '#',
-      LOGO_URL: newSite.logo_url || '/placeholder.svg', // Placeholder for logo
-      COVER_IMAGE_URL: newSite.cover_image_url || '/placeholder.svg', // Placeholder for cover image
-      ABOUT_IMAGE_URL: newSite.about_image_url || '/placeholder.svg', // Placeholder for about image
-      SUBDOMAIN: subdomain,
-      // Add more data fields as needed
-    };
+    // Replace placeholders in HTML content
+    const finalHtmlContent = replacePlaceholders(templateHtmlContent, dataToReplace);
+    filesToUpload.push({ path: `${subdomain}/index.html`, content: finalHtmlContent, contentType: 'text/html' });
 
-    let finalHtmlContent = replacePlaceholders(templateContent, dataToReplace);
-
-    // 2. Store the generated site files in Supabase Storage
-    const filePath = `${subdomain}/index.html`;
-    console.log(`Attempting to upload file to public-sites/${filePath}`);
-    const { error: uploadError } = await supabaseAdmin.storage
-      .from('public-sites')
-      .upload(filePath, finalHtmlContent, {
-        contentType: 'text/html',
-        upsert: true,
-      });
-
-    if (uploadError) {
-      console.error("Error uploading site to storage:", uploadError);
-      return new Response(JSON.stringify({ error: 'Failed to upload site files: ' + uploadError.message }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
-      });
+    // Fetch and add CSS file if specified
+    if (templateConfig.css) {
+      const { data: cssData, error: fetchCssError } = await supabaseAdmin.storage
+        .from('site-templates')
+        .download(templateConfig.css);
+      if (fetchCssError) {
+        console.warn(`Error fetching CSS template ${templateConfig.css}:`, fetchCssError);
+      } else {
+        filesToUpload.push({ path: `${subdomain}/${templateConfig.css.split('/').pop()}`, content: await cssData.text(), contentType: 'text/css' });
+      }
     }
-    console.log("Site files uploaded successfully.");
 
-    // 3. Update the site status in the database
+    // Fetch and add JS file if specified
+    if (templateConfig.js) {
+      const { data: jsData, error: fetchJsError } = await supabaseAdmin.storage
+        .from('site-templates')
+        .download(templateConfig.js);
+      if (fetchJsError) {
+        console.warn(`Error fetching JS template ${templateConfig.js}:`, fetchJsError);
+      } else {
+        filesToUpload.push({ path: `${subdomain}/${templateConfig.js.split('/').pop()}`, content: await jsData.text(), contentType: 'application/javascript' });
+      }
+    }
+
+    // Upload all collected files to public-sites bucket
+    for (const file of filesToUpload) {
+      console.log(`Attempting to upload file to public-sites/${file.path}`);
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from('public-sites')
+        .upload(file.path, file.content, {
+          contentType: file.contentType,
+          upsert: true,
+        });
+
+      if (uploadError) {
+        console.error(`Error uploading file ${file.path} to storage:`, uploadError);
+        return new Response(JSON.stringify({ error: `Failed to upload site file ${file.path}: ` + uploadError.message }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500,
+        });
+      }
+      console.log(`File ${file.path} uploaded successfully.`);
+    }
+
+    // Update the site status in the database
     const { data: publicUrlData } = supabaseAdmin.storage
       .from('public-sites')
-      .getPublicUrl(filePath);
+      .getPublicUrl(`${subdomain}/index.html`); // Get URL for the main HTML file
 
     const publicSiteUrl = publicUrlData?.publicUrl;
     console.log("Public site URL:", publicSiteUrl);
@@ -217,7 +239,7 @@ serve(async (req) => {
       .from('sites')
       .update({
         status: 'online',
-        cover_image_url: publicSiteUrl, // Use the generated site's URL as cover for now
+        cover_image_url: publicSiteUrl, // This will now point to the generated HTML, which is fine for a preview link
         last_updated_at: new Date().toISOString(),
         whatsapp_link: `https://wa.me/${phoneNumber?.replace(/\D/g, '')}`,
       })
@@ -232,7 +254,6 @@ serve(async (req) => {
       });
     }
     console.log("Site status updated successfully in DB.");
-
 
     return new Response(JSON.stringify({ message: 'Site generated and published successfully via trigger!' }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
