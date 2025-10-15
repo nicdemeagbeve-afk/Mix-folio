@@ -6,15 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import ServicesSection from "@/components/ServicesSection"; // New import
-import ContactFormSection from "@/components/ContactFormSection"; // New import
+import ServicesSection from "@/components/ServicesSection";
+import ContactFormSection from "@/components/ContactFormSection";
 import { CheckCircle, Shield, DollarSign, FormInput, Brain, Rocket, Globe, HardDrive, Wrench, Layout, Smartphone, MessageCircleMore, Star, Users, MapPin, Share2, Camera, Zap, TrendingUp, Lightbulb } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
 
   const handleStartWizard = () => {
-    navigate("/dashboard"); // Changed from /wizard to /dashboard
+    navigate("/wizard"); // Changed to point to the wizard route
   };
 
   const faqItems = [

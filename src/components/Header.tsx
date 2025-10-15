@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useSession } from '@/providers/SessionContextProvider';
 import { supabase } from '@/integrations/supabase/client';
 import { showSuccess, showError } from '@/utils/toast';
-import { Menu, X, User as UserIcon, HelpCircle } from 'lucide-react'; // Added UserIcon, HelpCircle for mobile menu
+import { Menu, X, User as UserIcon, HelpCircle } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import ProfileDropdown from './ProfileDropdown';
 
@@ -54,7 +54,7 @@ const Header: React.FC = () => {
                   👋 Bonjour {firstName} !
                 </span>
               )}
-              <Link to="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              <Link to="/wizard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 Créer un site
               </Link>
               {user ? (
@@ -81,7 +81,7 @@ const Header: React.FC = () => {
                   👋 Bonjour {firstName} !
                 </span>
               )}
-              <Link to="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={toggleMenu}>
+              <Link to="/wizard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={toggleMenu}>
                 Créer un site
               </Link>
               {user ? (

@@ -9,6 +9,8 @@ import Step4TemplateSelection from "./wizard-steps/Step4TemplateSelection";
 import { Button } from "@/components/ui/button";
 import { showSuccess, showError } from "@/utils/toast";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client"; // Import supabase client
+import { useSession } from "@/providers/SessionContextProvider"; // Import useSession
 
 export interface WizardFormData {
   companyName: string;
@@ -20,7 +22,7 @@ export interface WizardFormData {
   phoneNumber: string;
   plan: "pro" | "free" | undefined;
   selectedTemplateId: string;
-  subdomain: string; // Added subdomain to form data
+  subdomain: string;
 }
 
 const TOTAL_STEPS = 4;
@@ -37,9 +39,10 @@ const MultiStepWizard: React.FC = () => {
     phoneNumber: "",
     plan: undefined,
     selectedTemplateId: "",
-    subdomain: "", // Initialize subdomain
+    subdomain: "",
   });
   const navigate = useNavigate();
+  const { user } = useSession(); // Get the current user from session
 
   const nextStep = () => {
     if (currentStep < TOTAL_STEPS) {
@@ -54,24 +57,46 @@ const MultiStepWizard: React.FC = () => {
   };
 
   const handleSubmitWizard = async () => {
-    // Simulate backend call for site generation
-    showSuccess("Génération de votre site...");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (!user) {
+      showError("Vous devez être connecté pour créer un site.");
+      navigate('/login');
+      return;
+    }
 
-    // In a real app, you'd send formData to your backend
-    console.log("Final Wizard Data:", formData);
+    showSuccess("Génération de votre site en cours...");
 
-    // Simulate backend response with pre-filled template data
-    const generatedTemplateData = {
-      id: "generated-123", // A unique ID for the generated site
-      title: `Bienvenue chez ${formData.companyName} !`,
-      description: `Découvrez nos services et notre expertise. ${formData.activityDescription}`,
-      primaryColor: formData.primaryColor,
-      // More complex template data would go here
-    };
+    try {
+      // Call the Supabase Edge Function to generate the site
+      const { data, error } = await supabase.functions.invoke('generate-site', {
+        body: JSON.stringify({
+          ...formData,
+          userId: user.id, // Pass user ID to the Edge Function
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await supabase.auth.getSession().then(s => s.data.session?.access_token)}`
+        }
+      });
 
-    showSuccess("Votre site a été généré avec succès !");
-    navigate(`/editor/${generatedTemplateData.id}`, { state: { templateData: generatedTemplateData } });
+      if (error) {
+        console.error("Error invoking generate-site function:", error);
+        showError("Erreur lors de la génération de votre site : " + error.message);
+        return;
+      }
+
+      // Assuming the Edge Function returns the new site's ID or URL
+      const responseData = data as { message: string; url?: string; siteId?: string };
+      showSuccess(responseData.message || "Votre site a été généré avec succès !");
+
+      // After successful generation, navigate to the editor with the new site's ID
+      // For now, we'll use the subdomain as a unique identifier for the editor route
+      // In a real app, you'd get the actual site ID from the Edge Function response
+      navigate(`/editor/${formData.subdomain}`);
+
+    } catch (error) {
+      console.error("Unexpected error during site generation:", error);
+      showError("Une erreur inattendue est survenue lors de la génération du site.");
+    }
   };
 
   const renderStep = () => {

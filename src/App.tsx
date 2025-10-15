@@ -15,6 +15,7 @@ import DashboardCustomize from "./pages/DashboardCustomize";
 import DashboardStats from "./pages/DashboardStats";
 import DashboardSettings from "./pages/DashboardSettings";
 import DashboardHelp from "./pages/DashboardHelp";
+import MultiStepWizard from "./components/MultiStepWizard"; // Import the wizard
 
 
 const queryClient = new QueryClient();
@@ -30,9 +31,10 @@ const App = () => (
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Index />} />
-            <Route path="/editor/:templateId" element={<Editor />} />
+            <Route path="/wizard" element={<MultiStepWizard />} /> {/* Add the wizard route */}
+            <Route path="/editor/:templateId" element={<Editor />} /> {/* Renamed to :templateId for consistency with existing code, but it's actually subdomain */}
             <Route path="/dashboard" element={<Dashboard />}>
-              <Route index element={<DashboardOverview />} /> {/* Default dashboard view */}
+              <Route index element={<DashboardOverview />} />
               <Route path="overview" element={<DashboardOverview />} />
               <Route path="customize" element={<DashboardCustomize />} />
               <Route path="stats" element={<DashboardStats />} />

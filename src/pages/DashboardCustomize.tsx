@@ -1,37 +1,129 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import EditableHeroSection from "@/components/EditableHeroSection"; // Reusing this for preview
-import { showSuccess } from "@/utils/toast";
+import EditableHeroSection from "@/components/EditableHeroSection";
+import { showSuccess, showError } from "@/utils/toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useSession } from "@/providers/SessionContextProvider";
+import { useNavigate } from "react-router-dom";
+
+interface SiteData {
+  id: string;
+  title: string;
+  description: string;
+  primary_color: string;
+  cover_image_url?: string;
+  whatsapp_link?: string;
+  facebook_link?: string;
+  subdomain: string;
+}
 
 const DashboardCustomize: React.FC = () => {
-  // Placeholder for site data - in a real app, this would be fetched/managed
-  const [siteTitle, setSiteTitle] = useState("Bienvenue sur votre nouveau site !");
-  const [siteDescription, setSiteDescription] = useState("Personnalisez ce contenu pour refléter votre marque et vos services.");
-  const [sitePrimaryColor, setSitePrimaryColor] = useState("#3b82f6"); // Default blue
-  const [siteCoverImage, setSiteCoverImage] = useState("/placeholder.svg"); // Placeholder for image
-  const [whatsappLink, setWhatsappLink] = useState("https://wa.me/22890000000");
-  const [facebookLink, setFacebookLink] = useState("https://facebook.com/monentreprise");
+  const { user } = useSession();
+  const navigate = useNavigate();
 
-  const handleSaveChanges = () => {
-    // In a real app, send these changes to the backend
-    console.log("Saving customization changes:", { siteTitle, siteDescription, sitePrimaryColor, siteCoverImage, whatsappLink, facebookLink });
+  const [siteData, setSiteData] = useState<SiteData | null>(null);
+  const [siteTitle, setSiteTitle] = useState("Chargement...");
+  const [siteDescription, setSiteDescription] = useState("Chargement du contenu...");
+  const [sitePrimaryColor, setSitePrimaryColor] = useState("#3b82f6");
+  const [siteCoverImage, setSiteCoverImage] = useState("/placeholder.svg");
+  const [whatsappLink, setWhatsappLink] = useState("");
+  const [facebookLink, setFacebookLink] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSiteData = async () => {
+      if (!user) {
+        showError("Vous devez être connecté pour personnaliser un site.");
+        navigate('/login');
+        return;
+      }
+
+      setIsLoading(true);
+      // Fetch the first site owned by the user for customization
+      const { data, error } = await supabase
+        .from('sites')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false }) // Get the most recent site
+        .limit(1)
+        .single();
+
+      if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found
+        console.error("Error fetching site data for customization:", error);
+        showError("Erreur lors du chargement des données du site.");
+        setIsLoading(false);
+        return;
+      }
+
+      if (data) {
+        setSiteData(data);
+        setSiteTitle(data.title || "Bienvenue sur votre nouveau site !");
+        setSiteDescription(data.description || "Personnalisez ce contenu pour refléter votre marque et vos services.");
+        setSitePrimaryColor(data.primary_color || "#3b82f6");
+        setSiteCoverImage(data.cover_image_url || "/placeholder.svg");
+        setWhatsappLink(data.whatsapp_link || "");
+        setFacebookLink(data.facebook_link || "");
+        showSuccess(`Site "${data.title}" chargé pour personnalisation.`);
+      } else {
+        showError("Aucun site trouvé pour personnalisation. Veuillez créer un site d'abord.");
+        navigate('/dashboard'); // Redirect if no site exists
+      }
+      setIsLoading(false);
+    };
+
+    fetchSiteData();
+  }, [user, navigate]);
+
+  const handleSaveChanges = async () => {
+    if (!siteData || !user) {
+      showError("Impossible de sauvegarder : données du site manquantes ou non connecté.");
+      return;
+    }
+
+    showSuccess("Sauvegarde des modifications...");
+
+    const { error } = await supabase
+      .from('sites')
+      .update({
+        title: siteTitle,
+        description: siteDescription,
+        primary_color: sitePrimaryColor,
+        cover_image_url: siteCoverImage,
+        whatsapp_link: whatsappLink,
+        facebook_link: facebookLink,
+        last_updated_at: new Date().toISOString(),
+      })
+      .eq('id', siteData.id)
+      .eq('user_id', user.id);
+
+    if (error) {
+      console.error("Error saving customization changes:", error);
+      showError("Erreur lors de la sauvegarde des modifications : " + error.message);
+      return;
+    }
     showSuccess("Modifications sauvegardées avec succès !");
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center w-full h-full text-gray-700 dark:text-gray-300">
+        Chargement des options de personnalisation...
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col lg:flex-row h-full w-full">
       {/* Site Preview Area */}
       <div className="flex-grow lg:w-3/4 p-4 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
         <div className="w-full h-full max-h-[80vh] border border-dashed border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
-          {/* This is a simplified preview. A real "Wix-like" editor would use an iframe or more complex rendering. */}
           <EditableHeroSection title={siteTitle} description={siteDescription} primaryColor={sitePrimaryColor} />
-          {/* You could add more sections here to simulate a full page preview */}
         </div>
       </div>
 
@@ -45,8 +137,6 @@ const DashboardCustomize: React.FC = () => {
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="text">Texte</TabsTrigger>
             <TabsTrigger value="style">Style</TabsTrigger>
-            {/* <TabsTrigger value="images">Images</TabsTrigger> */}
-            {/* <TabsTrigger value="links">Liens</TabsTrigger> */}
           </TabsList>
           <TabsContent value="text" className="space-y-6 mt-4">
             <div>
@@ -80,18 +170,18 @@ const DashboardCustomize: React.FC = () => {
                 className="h-10 w-full"
               />
             </div>
-            {/* Placeholder for image upload */}
             <div>
-              <Label htmlFor="siteCoverImage" className="mb-2 block">Image de couverture</Label>
+              <Label htmlFor="siteCoverImage" className="mb-2 block">URL de l'image de couverture</Label>
               <Input
                 id="siteCoverImage"
-                type="file"
-                onChange={(e) => console.log("Image selected:", e.target.files?.[0]?.name)}
-                className="h-10 w-full"
+                value={siteCoverImage}
+                onChange={(e) => setSiteCoverImage(e.target.value)}
+                placeholder="URL de l'image"
               />
-              <p className="text-sm text-muted-foreground mt-1">Fichier actuel: {siteCoverImage.split('/').pop()}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {siteCoverImage.startsWith('http') ? 'Image externe' : 'Fichier local (placeholder)'}
+              </p>
             </div>
-            {/* Buttons & Links */}
             <div>
               <Label htmlFor="whatsappLink" className="mb-2 block">Lien WhatsApp</Label>
               <Input

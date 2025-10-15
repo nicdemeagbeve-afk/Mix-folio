@@ -1,20 +1,98 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, Edit, Settings, Clock, Users, TrendingUp, CheckCircle, Rocket } from "lucide-react";
-import { Link } from "react-router-dom";
-import ProgressBar from "@/components/ProgressBar"; // Assuming this is the wizard progress bar, can be adapted
+import { Link, useNavigate } from "react-router-dom";
+import ProgressBar from "@/components/ProgressBar";
+import { supabase } from "@/integrations/supabase/client";
+import { useSession } from "@/providers/SessionContextProvider";
+import { showError } from "@/utils/toast";
+
+interface SiteData {
+  id: string;
+  subdomain: string;
+  title: string;
+  description: string;
+  status: string;
+  last_updated_at: string;
+  cover_image_url?: string;
+  // Add other relevant fields
+}
 
 const DashboardOverview: React.FC = () => {
-  // Placeholder data - in a real app, this would come from a backend
-  const siteName = "monentreprise.ctcsite.com";
-  const siteStatus = "En ligne"; // or "Mise à jour en cours"
-  const lastUpdate = "2023-10-27 14:30";
+  const { user } = useSession();
+  const navigate = useNavigate();
+
+  const [siteData, setSiteData] = useState<SiteData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSiteData = async () => {
+      if (!user) {
+        showError("Vous devez être connecté pour voir le tableau de bord.");
+        navigate('/login');
+        return;
+      }
+
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('sites')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false }) // Get the most recent site
+        .limit(1)
+        .single();
+
+      if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found
+        console.error("Error fetching site data for overview:", error);
+        showError("Erreur lors du chargement des données de votre site.");
+        setIsLoading(false);
+        return;
+      }
+
+      if (data) {
+        setSiteData(data);
+      } else {
+        showError("Aucun site trouvé. Veuillez créer un site d'abord.");
+        // Optionally redirect to the wizard if no site exists
+        // navigate('/wizard');
+      }
+      setIsLoading(false);
+    };
+
+    fetchSiteData();
+  }, [user, navigate]);
+
+  // Placeholder data for stats (can be fetched from backend later)
   const visitorsThisMonth = 1250;
-  const pointsRemaining = 500; // Example for gamification
+  const pointsRemaining = 500;
   const siteCompletion = 80; // Example for progress bar
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center w-full h-full text-gray-700 dark:text-gray-300">
+        Chargement de la vue d'ensemble...
+      </div>
+    );
+  }
+
+  if (!siteData) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full p-6 text-center">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+          Bienvenue ! Il semble que vous n'ayez pas encore de site.
+        </h2>
+        <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
+          Commencez dès maintenant à créer votre site web professionnel en quelques minutes.
+        </p>
+        <Link to="/dashboard/customize"> {/* Link to customize which can lead to wizard */}
+          <Button size="lg">Créer mon premier site</Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-5xl mx-auto p-6 space-y-8">
@@ -30,18 +108,20 @@ const DashboardOverview: React.FC = () => {
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
           <div className="col-span-1">
-            <img src="/placeholder.svg" alt="Aperçu du site" className="w-full h-40 object-cover rounded-md border border-gray-200 dark:border-gray-700" />
+            <img src={siteData.cover_image_url || "/placeholder.svg"} alt="Aperçu du site" className="w-full h-40 object-cover rounded-md border border-gray-200 dark:border-gray-700" />
           </div>
           <div className="col-span-2 space-y-4">
             <div>
-              <p className="text-lg font-medium text-gray-700 dark:text-gray-300">Nom du site : <span className="font-bold text-blue-600 dark:text-blue-400">{siteName}</span></p>
-              <p className="text-lg font-medium text-gray-700 dark:text-gray-300">Statut : <span className="font-bold text-green-600 dark:text-green-400">✅ {siteStatus}</span></p>
+              <p className="text-lg font-medium text-gray-700 dark:text-gray-300">Nom du site : <span className="font-bold text-blue-600 dark:text-blue-400">{siteData.subdomain}.ctcsite.com</span></p>
+              <p className="text-lg font-medium text-gray-700 dark:text-gray-300">Statut : <span className="font-bold text-green-600 dark:text-green-400">✅ {siteData.status}</span></p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Button variant="outline" className="flex items-center gap-2">
-                <Eye className="h-4 w-4" /> Voir mon site
-              </Button>
-              <Link to="/dashboard/customize">
+              <a href={`https://${siteData.subdomain}.ctcsite.com`} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Eye className="h-4 w-4" /> Voir mon site
+                </Button>
+              </a>
+              <Link to={`/editor/${siteData.subdomain}`}>
                 <Button className="flex items-center gap-2">
                   <Edit className="h-4 w-4" /> Modifier
                 </Button>
@@ -64,7 +144,7 @@ const DashboardOverview: React.FC = () => {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{lastUpdate}</div>
+            <div className="text-2xl font-bold">{new Date(siteData.last_updated_at).toLocaleString()}</div>
           </CardContent>
         </Card>
         <Card className="shadow-md">
@@ -98,8 +178,7 @@ const DashboardOverview: React.FC = () => {
           <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
             Ton site est prêt à {siteCompletion}%. Ajoute ton logo pour le compléter.
           </p>
-          {/* Using ProgressBar from wizard, can be simplified or replaced if needed */}
-          <ProgressBar currentStep={siteCompletion / 20} totalSteps={5} /> {/* Example: 5 steps, each 20% */}
+          <ProgressBar currentStep={siteCompletion / 20} totalSteps={5} />
         </CardContent>
       </Card>
 
@@ -111,15 +190,15 @@ const DashboardOverview: React.FC = () => {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
             <p className="text-gray-700 dark:text-gray-300">Ajoute une photo de couverture</p>
-            <Button variant="outline" size="sm">Faire maintenant</Button>
+            <Link to={`/editor/${siteData.subdomain}`}><Button variant="outline" size="sm">Faire maintenant</Button></Link>
           </div>
           <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
             <p className="text-gray-700 dark:text-gray-300">Rédige la description de ton activité</p>
-            <Button variant="outline" size="sm">Faire maintenant</Button>
+            <Link to={`/editor/${siteData.subdomain}`}><Button variant="outline" size="sm">Faire maintenant</Button></Link>
           </div>
           <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
             <p className="text-gray-700 dark:text-gray-300">Active ton bouton WhatsApp</p>
-            <Button variant="outline" size="sm">Faire maintenant</Button>
+            <Link to={`/editor/${siteData.subdomain}`}><Button variant="outline" size="sm">Faire maintenant</Button></Link>
           </div>
         </CardContent>
       </Card>
