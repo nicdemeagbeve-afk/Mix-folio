@@ -63,39 +63,48 @@ const MultiStepWizard: React.FC = () => {
       return;
     }
 
-    showSuccess("Génération de votre site en cours...");
+    showSuccess("Création de l'entrée du site en base de données...");
 
     try {
-      // Call the Supabase Edge Function to generate the site
-      const { data, error } = await supabase.functions.invoke('generate-site', {
-        body: JSON.stringify({
-          ...formData,
-          userId: user.id, // Pass user ID to the Edge Function
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await supabase.auth.getSession().then(s => s.data.session?.access_token)}`
-        }
-      });
+      // Insert site data into the 'sites' table
+      const { data, error } = await supabase
+        .from('sites')
+        .insert({
+          user_id: user.id,
+          subdomain: formData.subdomain,
+          title: formData.companyName,
+          description: formData.activityDescription,
+          primary_color: formData.primaryColor,
+          site_type: formData.siteType,
+          plan: formData.plan,
+          // The 'content' column will be populated by the Edge Function
+          // The 'status' and 'cover_image_url' will also be updated by the Edge Function
+          content: {
+            selectedTemplateId: formData.selectedTemplateId,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            phoneNumber: formData.phoneNumber,
+            // Add any other data that needs to be stored in JSONB 'content'
+          }
+        })
+        .select()
+        .single();
 
       if (error) {
-        console.error("Error invoking generate-site function:", error);
-        showError("Erreur lors de la génération de votre site : " + error.message);
+        console.error("Error inserting site data:", error);
+        showError("Erreur lors de la création de l'entrée du site : " + error.message);
         return;
       }
 
-      // Assuming the Edge Function returns the new site's ID or URL
-      const responseData = data as { message: string; url?: string; siteId?: string };
-      showSuccess(responseData.message || "Votre site a été généré avec succès !");
+      showSuccess("Entrée du site créée. La génération du site est en cours...");
 
-      // After successful generation, navigate to the editor with the new site's ID
-      // For now, we'll use the subdomain as a unique identifier for the editor route
-      // In a real app, you'd get the actual site ID from the Edge Function response
+      // After successful insertion, the database trigger will invoke the Edge Function
+      // We can navigate to the editor immediately, assuming the generation will complete in the background
       navigate(`/editor/${formData.subdomain}`);
 
     } catch (error) {
-      console.error("Unexpected error during site generation:", error);
-      showError("Une erreur inattendue est survenue lors de la génération du site.");
+      console.error("Unexpected error during site data insertion:", error);
+      showError("Une erreur inattendue est survenue lors de la création du site.");
     }
   };
 

@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIVINE SHOP - Luxe & Élégance</title>
+    <link rel="stylesheet" href="style-luxury.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>DIVINE SHOP</h2>
+                <span class="tagline">Luxury Collection</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Accueil</a></li>
+                <li><a href="#products">Collection</a></li>
+                <li><a href="#testimonials">Témoignages</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="admin.php" class="admin-link"><i class="fas fa-crown"></i> Admin</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>DIVINE SHOP</h1>
+            <p class="hero-subtitle">Collection Exclusive de Luxe</p>
+            <p class="hero-description">Découvrez notre sélection raffinée de chaussures, sacs, montres et accessoires d'exception</p>
+            <button class="cta-btn" onclick="scrollToSection('products')">
+                <span>Explorer la Collection</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <div class="hero-decoration">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+        </div>
+    </section>
+
+    <!-- Categories Filter -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Notre Collection</h2>
+                <p>Chaque pièce est soigneusement sélectionnée pour son excellence</p>
+            </div>
+            <div class="category-filters">
+                <button class="filter-btn active" data-category="all">
+                    <i class="fas fa-star"></i>
+                    <span>Toute la Collection</span>
+                </button>
+                <button class="filter-btn" data-category="chaussures">
+                    <i class="fas fa-shoe-prints"></i>
+                    <span>Chaussures</span>
+                </button>
+                <button class="filter-btn" data-category="sacs">
+                    <i class="fas fa-handbag"></i>
+                    <span>Maroquinerie</span>
+                </button>
+                <button class="filter-btn" data-category="montres">
+                    <i class="fas fa-clock"></i>
+                    <span>Horlogerie</span>
+                </button>
+                <button class="filter-btn" data-category="accessoires">
+                    <i class="fas fa-gem"></i>
+                    <span>Bijoux</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+        <div class="container">
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Témoignages de nos Clients</h2>
+                <p>L'excellence reconnue par nos clients privilégiés</p>
+            </div>
+            <div class="testimonials-grid" id="testimonialsGrid">
+                <!-- Testimonials will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2>Contactez-nous</h2>
+                    <p>Notre équipe est à votre disposition pour vous accompagner</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>WhatsApp</h4>
+                                <span>+228 XX XX XX XX</span>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Email</h4>
+                                <span>contact@divineshop.com</span>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Boutique</h4>
+                                <span>Lomé, Maritime, Togo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Purchase Modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <h3>Finaliser votre Commande</h3>
+                <p>Quelques informations pour traiter votre demande</p>
+            </div>
+            <div class="product-info" id="modalProductInfo">
+                <!-- Product info will be inserted here -->
+            </div>
+            <form id="purchaseForm">
+                <input type="hidden" id="productId" name="productId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-sort-numeric-up"></i> Quantité</label>
+                        <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-shipping-fast"></i> Mode de récupération</label>
+                        <select id="deliveryMode" name="deliveryMode" required>
+                            <option value="">Choisir une option...</option>
+                            <option value="boutique">Récupération en boutique</option>
+                            <option value="livraison">Livraison premium</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="addressGroup" style="display: none;">
+                    <label><i class="fas fa-map-marker-alt"></i> Adresse de livraison</label>
+                    <textarea id="address" name="address" placeholder="Votre adresse complète de livraison"></textarea>
+                    <button type="button" id="shareLocation" class="location-btn">
+                        <i class="fas fa-location-arrow"></i>
+                        Partager ma position
+                    </button>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Envoyer la commande</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>DIVINE SHOP</h3>
+                    <p>L'excellence à votre portée</p>
+                </div>
+                <div class="footer-info">
+                    <p>&copy; 2025 Divine Shop. Tous droits réservés.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        :root {
+            --primary-gold: #d4af37;
+            --deep-black: #1a1a1a;
+            --luxury-grey: #2d2d2d;
+            --cream-white: #faf8f3;
+            --accent-rose: #c9a96e;
+            --text-light: #888;
+            --shadow-luxury: 0 20px 60px rgba(0, 0, 0, 0.2);
+            --gradient-gold: linear-gradient(135deg, #d4af37 0%, #c9a96e 100%);
+            --gradient-dark: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--deep-black);
+            background-color: var(--cream-white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            color: white;
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--primary-gold);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            font-size: 0.7rem;
+            color: var(--accent-rose);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: block;
+            margin-top: -5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-gold);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-menu a:hover::before, .admin-link::before {
+            left: 0;
+        }
+
+        .admin-link {
+            background: var(--gradient-gold) !important;
+            color: var(--deep-black) !important;
+            font-weight: 600;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: var(--primary-gold);
+            margin: 4px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: var(--gradient-dark);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="luxury" cx="50%" cy="50%"><stop offset="0%" stop-color="%23d4af37" stop-opacity="0.1"/><stop offset="100%" stop-color="%23000" stop-opacity="0"/></radialGradient></defs><rect width="100%" height="100%" fill="url(%23luxury)"/></svg>');
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--accent-rose);
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .cta-btn {
+            background: var(--gradient-gold);
+            color: var(--deep-black);
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            letter-spacing: 1px;
+            animation: fadeInUp 1s ease 0.6s both;
+            box-shadow: var(--shadow-luxury);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 80px rgba(212, 175, 55, 0.3);
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 1px solid var(--primary-gold);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 20%;
+            left: 50%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--deep-black);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--gradient-gold);
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Categories */
+        .categories-section {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 2px solid var(--primary-gold);
+            color: var(--deep-black);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--gradient-gold);
+            color: var(--deep-black);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-luxury);
+        }
+
+        .filter-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Products */
+        .products-section {
+            padding: 100px 0;
+            background: var(--cream-white);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-gold);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-luxury);
+        }
+
+        .product-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .product-card.hidden {
+            display: none;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 2rem;
+        }
+
+        .product-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--deep-black);
+        }
+
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .product-description {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: var(--gradient-gold);
+            color: var(--deep-black);
+            border: none;
+            padding: 1rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            padding: 100px 0;
+            background: var(--deep-black);
+            color: white;
+        }
+
+        .testimonials-section .section-header h2 {
+            color: white;
+        }
+
+        .testimonials-section .section-header p {
+            color: var(--accent-rose);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--luxury-grey);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            border: 1px solid var(--primary-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            font-size: 6rem;
+            color: var(--primary-gold);
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stars {
+            color: var(--primary-gold);
+            font-size: 1.5rem;
+            margin: 2rem 0 1.5rem;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 2rem;
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary-gold);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        /* Contact */
+        .contact-section {
+            padding: 100px 0;
+            background: var(--cream-white);
+        }
+
+        .contact-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--deep-black);
+            margin-bottom: 1rem;
+        }
+
+        .contact-content p {
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            border-left: 4px solid var(--primary-gold);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--deep-black);
+            font-size: 1.5rem;
+        }
+
+        .contact-details h4 {
+            color: var(--deep-black);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .contact-details span {
+            color: var(--text-light);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 3% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+            animation: modalSlideIn 0.4s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            background: var(--gradient-gold);
+            padding: 2rem;
+            text-align: center;
+            color: var(--deep-black);
+        }
+
+        .modal-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--deep-black);
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+
+        .close:hover {
+            transform: rotate(90deg);
+        }
+
+        .product-info {
+            padding: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            padding: 0 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: var(--deep-black);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .location-btn {
+            background: var(--luxury-grey);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.3s ease;
+        }
+
+        .location-btn:hover {
+            background: var(--deep-black);
+        }
+
+        .submit-btn {
+            width: calc(100% - 4rem);
+            margin: 0 2rem 2rem;
+            background: var(--gradient-gold);
+            color: var(--deep-black);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--deep-black);
+            color: white;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-brand p {
+            color: var(--accent-rose);
+        }
+
+        .footer-info p {
+            color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 90px;
+                flex-direction: column;
+                background: var(--deep-black);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+                gap: 1rem;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .modal-content {
+                margin: 5% auto;
+                width: 95%;
+            }
+
+            .contact-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script>
+        // Sample luxury data
+        let products = [
+            {
+                id: 1,
+                name: "Escarpins Prestige",
+                price: "45.000 FCFA",
+                category: "chaussures",
+                image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400",
+                description: "Escarpins en cuir italien, finition artisanale d'exception"
+            },
+            {
+                id: 2,
+                name: "Sac Couture Deluxe",
+                price: "85.000 FCFA", 
+                category: "sacs",
+                image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400",
+                description: "Maroquinerie de luxe, cuir véritable traité main"
+            },
+            {
+                id: 3,
+                name: "Montre Prestige Gold",
+                price: "120.000 FCFA",
+                category: "montres",
+                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+                description: "Horlogerie suisse, boîtier plaqué or 18 carats"
+            },
+            {
+                id: 4,
+                name: "Collier Diamant Royal",
+                price: "65.000 FCFA",
+                category: "accessoires",
+                image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400",
+                description: "Bijou d'exception serti de cristaux Swarovski"
+            },
+            {
+                id: 5,
+                name: "Bottes Cavalier Premium",
+                price: "55.000 FCFA",
+                category: "chaussures",
+                image: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400",
+                description: "Bottes en cuir noble, doublure soie naturelle"
+            },
+            {
+                id: 6,
+                name: "Clutch Evening Luxury",
+                price: "38.000 FCFA",
+                category: "sacs",
+                image: "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400",
+                description: "Pochette de soirée brodée main, finitions dorées"
+            }
+        ];
+
+        let testimonials = [
+            {
+                name: "Madame Adjoa Mensah",
+                text: "Une qualité exceptionnelle ! Mes achats chez Divine Shop sont toujours parfaits. Le service client est irréprochable.",
+                rating: 5
+            },
+            {
+                name: "Docteur Michel Koffi",
+                text: "L'élégance à l'état pur. Chaque pièce est une œuvre d'art. Je recommande cette boutique d'exception.",
+                rating: 5
+            },
+            {
+                name: "Mademoiselle Grace Ablavi",
+                text: "Divine Shop, c'est le luxe accessible. Des produits magnifiques et un service personnalisé remarquable.",
+                rating: 5
+            }
+        ];
+
+        // DOM Elements
+        const productsGrid = document.getElementById('productsGrid');
+        const testimonialsGrid = document.getElementById('testimonialsGrid');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const modal = document.getElementById('purchaseModal');
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProducts();
+            loadTestimonials();
+            setupEventListeners();
+            animateOnScroll();
+        });
+
+        // Mobile menu toggle
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        function loadProducts(category = 'all') {
+            productsGrid.innerHTML = '';
+            
+            const filteredProducts = category === 'all' ? products : products.filter(p => p.category === category);
+            
+            filteredProducts.forEach((product, index) => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.style.animationDelay = `${index * 0.1}s`;
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">${product.price}</p>
+                        <p class="product-description">${product.description}</p>
+                        <button class="buy-btn" onclick="openPurchaseModal(${product.id})">
+                            <i class="fas fa-gem"></i> 
+                            <span>Commander</span>
+                        </button>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+
+            // Animate cards
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.animation = 'slideInUp 0.6s ease forwards';
+                }, index * 100);
+            });
+        }
+
+        function loadTestimonials() {
+            testimonialsGrid.innerHTML = '';
+            
+            testimonials.forEach((testimonial, index) => {
+                const testimonialCard = document.createElement('div');
+                testimonialCard.className = 'testimonial-card';
+                testimonialCard.style.animationDelay = `${index * 0.2}s`;
+                
+                const stars = '★'.repeat(testimonial.rating);
+                
+                testimonialCard.innerHTML = `
+                    <div class="stars">${stars}</div>
+                    <p class="testimonial-text">${testimonial.text}</p>
+                    <p class="testimonial-author">${testimonial.name}</p>
+                `;
+                testimonialsGrid.appendChild(testimonialCard);
+            });
+        }
+
+        function setupEventListeners() {
+            // Filter buttons
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const category = btn.getAttribute('data-category');
+                    loadProducts(category);
+                });
+            });
+
+            // Modal close
+            document.querySelector('.close').addEventListener('click', closePurchaseModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closePurchaseModal();
+            });
+
+            // Delivery mode change
+            document.getElementById('deliveryMode').addEventListener('change', function() {
+                const addressGroup = document.getElementById('addressGroup');
+                if (this.value === 'livraison') {
+                    addressGroup.style.display = 'block';
+                } else {
+                    addressGroup.style.display = 'none';
+                }
+            });
+
+            // Share location
+            document.getElementById('shareLocation').addEventListener('click', shareLocation);
+
+            // Purchase form
+            document.getElementById('purchaseForm').addEventListener('submit', handlePurchase);
+
+            // Escape key to close modal
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    closePurchaseModal();
+                }
+            });
+        }
+
+        function openPurchaseModal(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            document.getElementById('productId').value = productId;
+            document.getElementById('modalProductInfo').innerHTML = `
+                <div style="display: flex; gap: 1.5rem; align-items: center;">
+                    <img src="${product.image}" alt="${product.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 15px; border: 2px solid var(--primary-gold);">
+                    <div>
+                        <h4 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--deep-black); margin-bottom: 0.5rem;">${product.name}</h4>
+                        <p style="color: var(--primary-gold); font-weight: bold; font-size: 1.2rem; margin-bottom: 0.5rem;">${product.price}</p>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">${product.description}</p>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePurchaseModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('purchaseForm').reset();
+            document.getElementById('addressGroup').style.display = 'none';
+        }
+
+        function shareLocation() {
+            if (navigator.geolocation) {
+                document.getElementById('shareLocation').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Localisation...';
+                
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+                    const currentAddress = document.getElementById('address').value;
+                    document.getElementById('address').value = currentAddress + `\n📍 Position GPS: ${mapsUrl}`;
+                    
+                    document.getElementById('shareLocation').innerHTML = '<i class="fas fa-check"></i> Position ajoutée';
+                    setTimeout(() => {
+                        document.getElementById('shareLocation').innerHTML = '<i class="fas fa-location-arrow"></i> Partager ma position';
+                    }, 2000);
+                }, function() {
+                    alert('Impossible d\'obtenir votre position. Vérifiez les autorisations de localisation.');
+                    document.getElementById('shareLocation').innerHTML = '<i class="fas fa-location-arrow"></i> Partager ma position';
+                });
+            } else {
+                alert('La géolocalisation n\'est pas supportée par ce navigateur.');
+            }
+        }
+
+        function handlePurchase(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const productId = formData.get('productId');
+            const quantity = formData.get('quantity');
+            const deliveryMode = formData.get('deliveryMode');
+            const address = formData.get('address');
+            
+            const product = products.find(p => p.id == productId);
+            
+            let message = `✨ *DIVINE SHOP - Commande Luxe* ✨\n\n`;
+            message += `🎁 *Produit Sélectionné:* ${product.name}\n`;
+            message += `💎 *Prix Unitaire:* ${product.price}\n`;
+            message += `📊 *Quantité Demandée:* ${quantity}\n`;
+            message += `🚀 *Mode de Service:* ${deliveryMode === 'boutique' ? 'Récupération VIP en Boutique' : 'Livraison Premium à Domicile'}\n`;
+            
+            if (deliveryMode === 'livraison' && address) {
+                message += `📍 *Adresse de Livraison:*\n${address}\n`;
+            }
+            
+            message += `\n─────────────────────\n`;
+            message += `🌟 *Merci de confirmer cette commande d'exception.*\n`;
+            message += `Notre équipe vous contactera sous 24h pour finaliser les détails.\n\n`;
+            message += `*Divine Shop - L'Excellence à Votre Service* 👑`;
+            
+            const whatsappNumber = "22890000000"; // À remplacer par le vrai numéro
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            
+            // Animation de confirmation
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Commande Envoyée !';
+            submitBtn.style.background = '#27ae60';
+            
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+                closePurchaseModal();
+            }, 1000);
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            const navHeight = document.querySelector('.navbar').offsetHeight;
+            const elementPosition = element.offsetTop - navHeight;
+            
+            window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                if (targetId) {
+                    scrollToSection(targetId);
+                }
+            });
+        });
+
+        // Animation on scroll
+        function animateOnScroll() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe sections
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+        // Parallax effect for hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroOverlay = document.querySelector('.hero-overlay');
+            if (heroOverlay) {
+                heroOverlay.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Loading animation
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+
+    <style>
+        /* Additional animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: slideInUp 0.8s ease forwards;
+        }
+
+        /* Loading state */
+        body:not(.loaded) * {
+            animation-play-state: paused !important;
+        }
+
+        /* Enhanced hover effects */
+        .product-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .product-card:hover::after {
+            left: 100%;
+        }
+
+        /* Luxury touch animations */
+        @keyframes luxuryGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
+        }
+
+        .filter-btn.active {
+            animation: luxuryGlow 2s infinite;
+        }
+
+        /* Premium scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cream-white);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-gold);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gold);
+        }
+    </style>
+</body>
+</html>
