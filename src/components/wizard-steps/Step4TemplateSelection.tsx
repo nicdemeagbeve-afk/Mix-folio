@@ -20,6 +20,10 @@ interface Step4TemplateSelectionProps {
 
 // Placeholder for templates - in a real app, this would come from a backend
 const allTemplates = [
+  { id: "ecommerce-luxury", name: "Boutique Luxe", type: "ecommerce", imageUrl: "/placeholder.svg" },
+  { id: "ecommerce-basic", name: "Boutique Basique", type: "ecommerce", imageUrl: "/placeholder.svg" },
+  { id: "portfolio-basic", name: "Portfolio Simple", type: "portfolio", imageUrl: "/placeholder.svg" },
+  // Add other templates here as needed
   { id: "vitrine-1", name: "Vitrine Moderne", type: "vitrine", imageUrl: "/placeholder.svg" },
   { id: "vitrine-2", name: "Vitrine Élégante", type: "vitrine", imageUrl: "/placeholder.svg" },
   { id: "portfolio-1", name: "Portfolio Créatif", type: "portfolio", imageUrl: "/placeholder.svg" },

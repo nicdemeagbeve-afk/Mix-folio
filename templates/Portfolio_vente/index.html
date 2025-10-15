@@ -3,14 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio de [Votre Nom]</title>
+    <title>Portfolio de {{COMPANY_NAME}}</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- VARIABLES MODIFIABLES PAR LE WIZARD --- */
+        :root {
+            --couleur-primaire: {{PRIMARY_COLOR}}; /* Couleur principale pour les boutons, liens, etc. */
+            --couleur-secondaire: #343a40; /* Couleur pour les titres, l'en-tête, etc. */
+            --couleur-fond: #f8f9fa;      /* Couleur de fond des sections claires */
+            --couleur-fond-sombre: #ffffff; /* Couleur de fond des sections sombres ou cartes */
+            --couleur-texte: #212529;      /* Couleur du texte principal */
+            --couleur-texte-clair: #ffffff;/* Couleur du texte sur fonds sombres */
+            --police-principale: 'Arial', sans-serif;
+        }
+
+        /* --- STYLES GÉNÉRAUX --- */
+        body {
+            margin: 0;
+            font-family: var(--police-principale);
+            color: var(--couleur-texte);
+            background-color: var(--couleur-fond);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        h1, h2, h3 {
+            color: var(--couleur-secondaire);
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+
+        /* --- HEADER --- */
+        .header-main {
+            background-color: var(--couleur-fond-sombre);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header-main .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--couleur-primaire);
+        }
+        .main-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+        }
+        .main-nav a {
+            text-decoration: none;
+            color: var(--couleur-secondaire);
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .main-nav a:hover {
+            color: var(--couleur-primaire);
+        }
+
+        /* --- SECTION ACCUEIL --- */
+        .section-accueil {
+            text-align: center;
+            padding: 80px 0;
+            background-color: var(--couleur-fond);
+        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid var(--couleur-primaire);
+            margin-bottom: 20px;
+        }
+        .job-title {
+            font-size: 1.2rem;
+            color: var(--couleur-texte);
+            margin-top: -10px;
+            font-style: italic;
+        }
+        .bio {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: var(--couleur-primaire);
+            color: var(--couleur-texte-clair);
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .cta-button:hover {
+            opacity: 0.9;
+        }
+
+        /* --- SECTIONS GÉNÉRIQUES --- */
+        .section-competences, .section-portfolio, .section-produits {
+            padding: 60px 0;
+        }
+        .section-portfolio {
+            background-color: var(--couleur-fond-sombre);
+        }
+
+        /* --- GRILLES (COMPÉTENCES & PORTFOLIO) --- */
+        .skills-grid, .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .skill-item, .project-item {
+            background-color: var(--couleur-fond-sombre);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .skill-item:hover, .project-item:hover {
+            transform: translateY(-5px);
+        }
+        .project-item img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* --- CARROUSEL --- */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            max-width: 90%;
+            margin: auto;
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-item {
+            min-width: 30%; /* Ajustez pour voir plus ou moins d'items */
+            flex-shrink: 0;
+            box-sizing: border-box;
+            padding: 15px;
+            text-align: center;
+        }
+        .carousel-item img {
+            width: 100%;
+            border-radius: 8px;
+        }
+        .produit-prix {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--couleur-primaire);
+        }
+        .btn-achat {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: var(--couleur-secondaire);
+            color: var(--couleur-texte-clair);
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        /* --- FOOTER --- */
+        .footer-main {
+            background-color: var(--couleur-secondaire);
+            color: var(--couleur-texte-clair);
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .section-title { font-size: 2rem; }
+            .header-main .container { flex-direction: column; gap: 10px; }
+            .carousel-item { min-width: 80%; }
+        }
+    </style>
 </head>
 <body>
 
     <header class="header-main">
         <div class="container">
-            <div id="logo-text" class="logo">Votre Logo</div>
+            <div id="logo-text" class="logo">{{COMPANY_NAME}}</div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="#accueil">Accueil</a></li>
@@ -25,9 +229,9 @@
     <main>
         <section id="accueil" class="section-accueil">
             <div class="container hero-content">
-                <img src="https://via.placeholder.com/150" alt="Photo de profil" id="photo-profil" class="profile-img">
-                <h1 id="nom-personne">Je suis [Votre Nom]</h1>
-                <p id="titre-job" class="job-title">[Votre Titre / Profession]</p>
+                <img src="{{PROFILE_IMAGE_URL}}" alt="Photo de profil" id="photo-profil" class="profile-img">
+                <h1 id="nom-personne">Je suis {{FIRST_NAME}} {{LAST_NAME}}</h1>
+                <p id="titre-job" class="job-title">{{ACTIVITY_DESCRIPTION}}</p>
                 <p id="description-personnelle" class="bio">
                     Bienvenue sur mon portfolio. Voici une brève description de qui je suis, ce que je fais et ce que je peux vous apporter. Ce texte est entièrement modifiable.
                 </p>
@@ -110,10 +314,53 @@
 
     <footer class="footer-main">
         <div class="container">
-            <p id="footer-texte">&copy; 2025 [Votre Nom]. Tous droits réservés.</p>
+            <p id="footer-texte">&copy; 2025 {{COMPANY_NAME}}. Tous droits réservés.</p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const track = document.getElementById('carousel-produits');
+            const items = Array.from(track.children);
+            const nextButton = document.getElementById('carousel-next');
+            const prevButton = document.getElementById('carousel-prev');
+
+            if (!track || items.length === 0 || !nextButton || !prevButton) {
+                console.error("Éléments du carrousel non trouvés.");
+                return;
+            }
+
+            // Calcul de la largeur d'un item
+            const itemWidth = items[0].getBoundingClientRect().width;
+
+            let currentIndex = 0;
+
+            // Fonction pour déplacer le carrousel
+            const moveToSlide = (targetIndex) => {
+                // Gérer les limites
+                if (targetIndex < 0) {
+                    targetIndex = 0;
+                }
+                if (targetIndex >= items.length) {
+                    // Optionnel: revenir au début pour un carrousel infini
+                    // targetIndex = 0; 
+                    targetIndex = items.length - 1; // Bloquer à la fin
+                }
+                
+                track.style.transform = 'translateX(-' + itemWidth * targetIndex + 'px)';
+                currentIndex = targetIndex;
+            };
+
+            // Bouton Suivant
+            nextButton.addEventListener('click', e => {
+                moveToSlide(currentIndex + 1);
+            });
+
+            // Bouton Précédent
+            prevButton.addEventListener('click', e => {
+                moveToSlide(currentIndex - 1);
+            });
+        });
+    </script>
 </body>
 </html>

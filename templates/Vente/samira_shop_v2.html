@@ -3,17 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIVINE SHOP - Luxe & Élégance</title>
+    <title>{{COMPANY_NAME}} - Luxe & Élégance</title>
     <link rel="stylesheet" href="style-luxury.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: {{PRIMARY_COLOR}}; /* Dynamic primary color */
+            --deep-black: #1a1a1a;
+            --luxury-grey: #2d2d2d;
+            --cream-white: #faf8f3;
+            --accent-rose: #c9a96e;
+            --text-light: #888;
+            --shadow-luxury: 0 20px 60px rgba(0, 0, 0, 0.2);
+            --gradient-gold: linear-gradient(135deg, {{PRIMARY_COLOR}} 0%, #c9a96e 100%); /* Dynamic gradient */
+            --gradient-dark: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+        /* Existing styles... */
+        .navbar {
+            border-bottom: 1px solid var(--primary-gold);
+        }
+        .nav-logo h2 {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-menu a::before {
+            background: var(--gradient-gold);
+        }
+        .admin-link {
+            background: var(--gradient-gold) !important;
+            color: var(--deep-black) !important;
+        }
+        .hamburger span {
+            background: var(--primary-gold);
+        }
+        .hero-overlay {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="luxury" cx="50%" cy="50%"><stop offset="0%" stop-color="{{PRIMARY_COLOR_ENCODED}}" stop-opacity="0.1"/><stop offset="100%" stop-color="%23000" stop-opacity="0"/></radialGradient></defs><rect width="100%" height="100%" fill="url(%23luxury)"/></svg>');
+        }
+        .hero h1 {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .cta-btn {
+            background: var(--gradient-gold);
+            color: var(--deep-black);
+            box-shadow: var(--shadow-luxury);
+        }
+        .cta-btn:hover {
+            box-shadow: 0 30px 80px rgba(212, 175, 55, 0.3); /* Keep original shadow color for now */
+        }
+        .floating-element {
+            border: 1px solid var(--primary-gold);
+        }
+        .section-header h2::after {
+            background: var(--gradient-gold);
+        }
+        .filter-btn {
+            border: 2px solid var(--primary-gold);
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--gradient-gold);
+            color: var(--deep-black);
+            box-shadow: var(--shadow-luxury);
+        }
+        .product-card::before {
+            background: var(--gradient-gold);
+        }
+        .product-card:hover {
+            box-shadow: var(--shadow-luxury);
+        }
+        .product-price {
+            color: var(--primary-gold);
+        }
+        .buy-btn {
+            background: var(--gradient-gold);
+            color: var(--deep-black);
+        }
+        .buy-btn:hover {
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3); /* Keep original shadow color for now */
+        }
+        .testimonials-section {
+            background: var(--deep-black);
+        }
+        .testimonial-card {
+            border: 1px solid var(--primary-gold);
+        }
+        .testimonial-card::before {
+            color: var(--primary-gold);
+        }
+        .stars {
+            color: var(--primary-gold);
+        }
+        .testimonial-author {
+            color: var(--primary-gold);
+        }
+        .contact-item {
+            border-left: 4px solid var(--primary-gold);
+        }
+        .contact-icon {
+            background: var(--gradient-gold);
+            color: var(--deep-black);
+        }
+        .modal-header {
+            background: var(--gradient-gold);
+            color: var(--deep-black);
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary-gold);
+        }
+        .location-btn {
+            background: var(--luxury-grey);
+            color: white;
+        }
+        .submit-btn {
+            background: var(--gradient-gold);
+            color: var(--deep-black);
+        }
+        .submit-btn:hover {
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3); /* Keep original shadow color for now */
+        }
+        footer {
+            background: var(--deep-black);
+        }
+        .footer-brand h3 {
+            color: var(--primary-gold);
+        }
+        .product-card::after {
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent); /* Keep original shadow color for now */
+        }
+        .filter-btn.active {
+            animation: luxuryGlow 2s infinite;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-gold);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gold);
+        }
+        .product-info #modalProductInfo img {
+            border: 2px solid var(--primary-gold);
+        }
+        .product-info #modalProductInfo p {
+            color: var(--primary-gold);
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <h2>DIVINE SHOP</h2>
+                <h2>{{COMPANY_NAME}}</h2>
                 <span class="tagline">Luxury Collection</span>
             </div>
             <ul class="nav-menu">
@@ -35,9 +179,9 @@
     <section id="home" class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1>DIVINE SHOP</h1>
+            <h1>{{COMPANY_NAME}}</h1>
             <p class="hero-subtitle">Collection Exclusive de Luxe</p>
-            <p class="hero-description">Découvrez notre sélection raffinée de chaussures, sacs, montres et accessoires d'exception</p>
+            <p class="hero-description">{{ACTIVITY_DESCRIPTION}}</p>
             <button class="cta-btn" onclick="scrollToSection('products')">
                 <span>Explorer la Collection</span>
                 <i class="fas fa-arrow-right"></i>
@@ -119,7 +263,7 @@
                             </div>
                             <div class="contact-details">
                                 <h4>WhatsApp</h4>
-                                <span>+228 XX XX XX XX</span>
+                                <span>{{WHATSAPP_LINK}}</span>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -128,7 +272,7 @@
                             </div>
                             <div class="contact-details">
                                 <h4>Email</h4>
-                                <span>contact@divineshop.com</span>
+                                <span>contact@{{SUBDOMAIN}}.ctcsite.com</span>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -193,816 +337,15 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <h3>DIVINE SHOP</h3>
+                    <h3>{{COMPANY_NAME}}</h3>
                     <p>L'excellence à votre portée</p>
                 </div>
                 <div class="footer-info">
-                    <p>&copy; 2025 Divine Shop. Tous droits réservés.</p>
+                    <p>&copy; 2025 {{COMPANY_NAME}}. Tous droits réservés.</p>
                 </div>
             </div>
         </div>
     </footer>
-
-    <style>
-        :root {
-            --primary-gold: #d4af37;
-            --deep-black: #1a1a1a;
-            --luxury-grey: #2d2d2d;
-            --cream-white: #faf8f3;
-            --accent-rose: #c9a96e;
-            --text-light: #888;
-            --shadow-luxury: 0 20px 60px rgba(0, 0, 0, 0.2);
-            --gradient-gold: linear-gradient(135deg, #d4af37 0%, #c9a96e 100%);
-            --gradient-dark: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--deep-black);
-            background-color: var(--cream-white);
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Navigation */
-        .navbar {
-            background: rgba(26, 26, 26, 0.95);
-            backdrop-filter: blur(20px);
-            color: white;
-            padding: 1.5rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--primary-gold);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-logo h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 2px;
-        }
-
-        .tagline {
-            font-size: 0.7rem;
-            color: var(--accent-rose);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            display: block;
-            margin-top: -5px;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 3rem;
-        }
-
-        .nav-menu a {
-            color: white;
-            text-decoration: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-menu a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient-gold);
-            transition: left 0.3s ease;
-            z-index: -1;
-        }
-
-        .nav-menu a:hover::before, .admin-link::before {
-            left: 0;
-        }
-
-        .admin-link {
-            background: var(--gradient-gold) !important;
-            color: var(--deep-black) !important;
-            font-weight: 600;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 2px;
-            background: var(--primary-gold);
-            margin: 4px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            background: var(--gradient-dark);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="luxury" cx="50%" cy="50%"><stop offset="0%" stop-color="%23d4af37" stop-opacity="0.1"/><stop offset="100%" stop-color="%23000" stop-opacity="0"/></radialGradient></defs><rect width="100%" height="100%" fill="url(%23luxury)"/></svg>');
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.6; }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 900px;
-        }
-
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 3px;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            color: var(--accent-rose);
-            margin-bottom: 1.5rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            animation: fadeInUp 1s ease 0.2s both;
-        }
-
-        .hero-description {
-            font-size: 1.2rem;
-            margin-bottom: 3rem;
-            opacity: 0.9;
-            line-height: 1.8;
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-
-        .cta-btn {
-            background: var(--gradient-gold);
-            color: var(--deep-black);
-            padding: 1.2rem 3rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 1rem;
-            letter-spacing: 1px;
-            animation: fadeInUp 1s ease 0.6s both;
-            box-shadow: var(--shadow-luxury);
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 80px rgba(212, 175, 55, 0.3);
-        }
-
-        .floating-element {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border: 1px solid var(--primary-gold);
-            border-radius: 50%;
-            opacity: 0.1;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .floating-element:nth-child(1) {
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-element:nth-child(2) {
-            top: 60%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-
-        .floating-element:nth-child(3) {
-            bottom: 20%;
-            left: 50%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-30px) rotate(180deg); }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Section Headers */
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            color: var(--deep-black);
-            margin-bottom: 1rem;
-            position: relative;
-        }
-
-        .section-header h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: var(--gradient-gold);
-            border-radius: 2px;
-        }
-
-        .section-header p {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Categories */
-        .categories-section {
-            padding: 100px 0;
-            background: white;
-        }
-
-        .category-filters {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: white;
-            border: 2px solid var(--primary-gold);
-            color: var(--deep-black);
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-size: 1rem;
-            letter-spacing: 0.5px;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--gradient-gold);
-            color: var(--deep-black);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-luxury);
-        }
-
-        .filter-btn i {
-            font-size: 1.1rem;
-        }
-
-        /* Products */
-        .products-section {
-            padding: 100px 0;
-            background: var(--cream-white);
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-            transition: all 0.4s ease;
-            position: relative;
-        }
-
-        .product-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: var(--gradient-gold);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-15px);
-            box-shadow: var(--shadow-luxury);
-        }
-
-        .product-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .product-card.hidden {
-            display: none;
-        }
-
-        .product-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .product-card:hover .product-image {
-            transform: scale(1.05);
-        }
-
-        .product-info {
-            padding: 2rem;
-        }
-
-        .product-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-            color: var(--deep-black);
-        }
-
-        .product-price {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-gold);
-            margin-bottom: 1rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .product-description {
-            color: var(--text-light);
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-
-        .buy-btn {
-            width: 100%;
-            background: var(--gradient-gold);
-            color: var(--deep-black);
-            border: none;
-            padding: 1rem;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            letter-spacing: 0.5px;
-        }
-
-        .buy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
-        }
-
-        /* Testimonials */
-        .testimonials-section {
-            padding: 100px 0;
-            background: var(--deep-black);
-            color: white;
-        }
-
-        .testimonials-section .section-header h2 {
-            color: white;
-        }
-
-        .testimonials-section .section-header p {
-            color: var(--accent-rose);
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .testimonial-card {
-            background: var(--luxury-grey);
-            padding: 3rem;
-            border-radius: 20px;
-            text-align: center;
-            position: relative;
-            border: 1px solid var(--primary-gold);
-            transition: transform 0.3s ease;
-        }
-
-        .testimonial-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .testimonial-card::before {
-            content: '"';
-            font-size: 6rem;
-            color: var(--primary-gold);
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'Playfair Display', serif;
-        }
-
-        .stars {
-            color: var(--primary-gold);
-            font-size: 1.5rem;
-            margin: 2rem 0 1.5rem;
-        }
-
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 2rem;
-            color: #ccc;
-            line-height: 1.8;
-            font-size: 1.1rem;
-        }
-
-        .testimonial-author {
-            font-weight: 600;
-            color: var(--primary-gold);
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-        }
-
-        /* Contact */
-        .contact-section {
-            padding: 100px 0;
-            background: var(--cream-white);
-        }
-
-        .contact-content h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: var(--deep-black);
-            margin-bottom: 1rem;
-        }
-
-        .contact-content p {
-            color: var(--text-light);
-            margin-bottom: 3rem;
-            font-size: 1.1rem;
-        }
-
-        .contact-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .contact-item {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
-            border-left: 4px solid var(--primary-gold);
-        }
-
-        .contact-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .contact-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--deep-black);
-            font-size: 1.5rem;
-        }
-
-        .contact-details h4 {
-            color: var(--deep-black);
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .contact-details span {
-            color: var(--text-light);
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background: white;
-            margin: 3% auto;
-            padding: 0;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 600px;
-            position: relative;
-            overflow: hidden;
-            animation: modalSlideIn 0.4s ease;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .modal-header {
-            background: var(--gradient-gold);
-            padding: 2rem;
-            text-align: center;
-            color: var(--deep-black);
-        }
-
-        .modal-header h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .close {
-            position: absolute;
-            right: 1.5rem;
-            top: 1.5rem;
-            font-size: 2rem;
-            cursor: pointer;
-            color: var(--deep-black);
-            z-index: 10;
-            transition: transform 0.3s ease;
-        }
-
-        .close:hover {
-            transform: rotate(90deg);
-        }
-
-        .product-info {
-            padding: 2rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            padding: 0 2rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-            color: var(--deep-black);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-gold);
-        }
-
-        .form-group textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
-        .location-btn {
-            background: var(--luxury-grey);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: background 0.3s ease;
-        }
-
-        .location-btn:hover {
-            background: var(--deep-black);
-        }
-
-        .submit-btn {
-            width: calc(100% - 4rem);
-            margin: 0 2rem 2rem;
-            background: var(--gradient-gold);
-            color: var(--deep-black);
-            border: none;
-            padding: 1.2rem;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            letter-spacing: 0.5px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--deep-black);
-            color: white;
-            padding: 3rem 0;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-brand h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: var(--primary-gold);
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-brand p {
-            color: var(--accent-rose);
-        }
-
-        .footer-info p {
-            color: var(--text-light);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 90px;
-                flex-direction: column;
-                background: var(--deep-black);
-                width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                padding: 2rem 0;
-                gap: 1rem;
-            }
-
-            .nav-menu.active {
-                left: 0;
-            }
-
-            .hero h1 {
-                font-size: 3rem;
-            }
-
-            .section-header h2 {
-                font-size: 2rem;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .modal-content {
-                margin: 5% auto;
-                width: 95%;
-            }
-
-            .contact-methods {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 
     <script>
         // Sample luxury data
@@ -1258,7 +601,7 @@
             
             const product = products.find(p => p.id == productId);
             
-            let message = `✨ *DIVINE SHOP - Commande Luxe* ✨\n\n`;
+            let message = `✨ *{{COMPANY_NAME}} - Commande Luxe* ✨\n\n`;
             message += `🎁 *Produit Sélectionné:* ${product.name}\n`;
             message += `💎 *Prix Unitaire:* ${product.price}\n`;
             message += `📊 *Quantité Demandée:* ${quantity}\n`;
@@ -1271,9 +614,9 @@
             message += `\n─────────────────────\n`;
             message += `🌟 *Merci de confirmer cette commande d'exception.*\n`;
             message += `Notre équipe vous contactera sous 24h pour finaliser les détails.\n\n`;
-            message += `*Divine Shop - L'Excellence à Votre Service* 👑`;
+            message += `*{{COMPANY_NAME}} - L'Excellence à Votre Service* 👑`;
             
-            const whatsappNumber = "22890000000"; // À remplacer par le vrai numéro
+            const whatsappNumber = "{{PHONE_NUMBER}}"; // À remplacer par le vrai numéro
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
             
             // Animation de confirmation
