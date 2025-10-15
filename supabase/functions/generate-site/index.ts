@@ -12,6 +12,9 @@ serve(async (req) => {
   }
 
   console.log("Edge Function 'generate-site' invoked.");
+  console.log("SUPABASE_URL loaded:", !!Deno.env.get('SUPABASE_URL'));
+  console.log("SUPABASE_SERVICE_ROLE_KEY loaded:", !!Deno.env.get('SUPABASE_SERVICE_ROLE_KEY'));
+
 
   const authHeader = req.headers.get('Authorization')
   if (!authHeader) {
