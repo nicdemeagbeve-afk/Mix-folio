@@ -3,18 +3,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"; // Added CardFooter
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import ServicesSection from "@/components/ServicesSection";
-import ContactFormSection from "@/components/ContactFormSection";
-import { CheckCircle, Shield, DollarSign, FormInput, Brain, Rocket, Globe, HardDrive, Wrench, Layout, Smartphone, MessageCircleMore, Star, Users, MapPin, Share2, Camera, Zap, TrendingUp, Lightbulb } from "lucide-react";
+import { CheckCircle, Shield, DollarSign, FormInput, Brain, Rocket, Globe, HardDrive, Wrench, Layout, Smartphone, MessageCircleMore, Star, Users, MapPin, Share2, Camera } from "lucide-react"; // Added Share2 and Camera
 
 const Index = () => {
   const navigate = useNavigate();
 
   const handleStartWizard = () => {
-    navigate("/wizard"); // Changed to point to the wizard route
+    navigate("/wizard");
   };
 
   const faqItems = [
@@ -114,11 +112,8 @@ const Index = () => {
         </p>
       </section>
 
-      {/* New Services Section */}
-      <ServicesSection />
-
       {/* What you get for 1000 F CFA */}
-      <section className="w-full max-w-6xl mx-auto py-16 px-4 bg-blue-50 dark:bg-gray-800 rounded-lg shadow-inner mt-12">
+      <section className="w-full max-w-6xl mx-auto py-16 px-4 bg-blue-50 dark:bg-gray-800 rounded-lg shadow-inner">
         <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">
           Ce que tu obtiens pour <span className="text-blue-600 dark:text-blue-400">1000 F CFA</span>
         </h2>
@@ -161,7 +156,7 @@ const Index = () => {
       </section>
 
       {/* Examples of sites created automatically */}
-      <section className="w-full max-w-6xl mx-auto py-16 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-inner mt-12">
+      <section className="w-full max-w-6xl mx-auto py-16 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-inner">
         <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">
           Exemples de sites créés automatiquement
         </h2>
@@ -213,7 +208,7 @@ const Index = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="w-full max-w-4xl mx-auto py-16 px-4 bg-blue-50 dark:bg-gray-800 rounded-lg shadow-inner mt-12">
+      <section className="w-full max-w-4xl mx-auto py-16 px-4 bg-blue-50 dark:bg-gray-800 rounded-lg shadow-inner">
         <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">
           Questions fréquentes
         </h2>
@@ -231,11 +226,8 @@ const Index = () => {
         </Accordion>
       </section>
 
-      {/* New Contact Form Section */}
-      <ContactFormSection />
-
       {/* Final Call To Action */}
-      <section className="w-full py-20 text-center bg-blue-600 dark:bg-blue-900 text-white mt-12">
+      <section className="w-full py-20 text-center bg-blue-600 dark:bg-blue-900 text-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-4xl sm:text-5xl font-extrabold mb-8">
             Ne laisse pas ton idée dormir. Mets ton business en ligne aujourd’hui pour seulement <span className="text-yellow-300">1000 F</span> !

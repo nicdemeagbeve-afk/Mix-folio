@@ -3,20 +3,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { SessionContextProvider } from "./providers/SessionContextProvider";
-import Header from "./components/Header";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Wizard from "./pages/Wizard"; // Import the new Wizard page
 import Editor from "./pages/Editor";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import DashboardOverview from "./pages/DashboardOverview";
-import DashboardCustomize from "./pages/DashboardCustomize";
-import DashboardStats from "./pages/DashboardStats";
-import DashboardSettings from "./pages/DashboardSettings";
-import DashboardHelp from "./pages/DashboardHelp";
-import MultiStepWizard from "./components/MultiStepWizard"; // Import the wizard
-
 
 const queryClient = new QueryClient();
 
@@ -26,25 +16,13 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <SessionContextProvider>
-          <Header />
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Index />} />
-            <Route path="/wizard" element={<MultiStepWizard />} /> {/* Add the wizard route */}
-            <Route path="/editor/:templateId" element={<Editor />} /> {/* Renamed to :templateId for consistency with existing code, but it's actually subdomain */}
-            <Route path="/dashboard" element={<Dashboard />}>
-              <Route index element={<DashboardOverview />} />
-              <Route path="overview" element={<DashboardOverview />} />
-              <Route path="customize" element={<DashboardCustomize />} />
-              <Route path="stats" element={<DashboardStats />} />
-              <Route path="settings" element={<DashboardSettings />} />
-              <Route path="help" element={<DashboardHelp />} />
-            </Route>
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </SessionContextProvider>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/wizard" element={<Wizard />} /> {/* New route for the wizard */}
+          <Route path="/editor/:templateId" element={<Editor />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
